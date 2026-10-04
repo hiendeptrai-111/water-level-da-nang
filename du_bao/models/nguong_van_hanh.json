@@ -1,0 +1,31 @@
+{
+  "_nguon": "Bảng quy định mực nước vận hành trên cổng PCTT Đà Nẵng; Quyết định 1865/QĐ-TTg (Quy trình vận hành liên hồ chứa lưu vực sông Vu Gia – Thu Bồn).",
+  "_ghi_chu": [
+    "Đơn vị: m. Dùng cho trường so_voi_nguong_van_hanh trong du_bao.py.",
+    "Mỗi ngưỡng có dạng {\"gia_tri\": số, \"tu\": \"MM-DD\" | null, \"den\": \"MM-DD\" | null, \"ap_dung\": ghi chú}.",
+    "tu/den: khoảng ngày áp dụng trong năm, tính cả hai đầu, được phép vắt qua năm (ví dụ 12-15 → 01-31).",
+    "tu/den = null: CHƯA XÁC NHẬN khoảng áp dụng — du_bao.py vẫn so sánh nhưng ghi khoang_ap_dung_da_xac_nhan = false.",
+    "Có thể khai báo nhiều thời kỳ bằng một danh sách các đối tượng như trên.",
+    "Sửa file này không cần huấn luyện lại; khởi động lại tiến trình gọi du_bao() để nạp lại."
+  ],
+  "a_vuong": {
+    "MNDBT": {"gia_tri": 380.00, "tu": "01-01", "den": "12-31", "ap_dung": "cả năm"},
+    "muc_nuoc_cao_nhat_truoc_lu": {"gia_tri": 376.00, "tu": null, "den": null, "ap_dung": "can_xac_nhan_theo_QD1865"},
+    "muc_nuoc_don_lu": {"gia_tri": 370.00, "tu": null, "den": null, "ap_dung": "can_xac_nhan_theo_QD1865"}
+  },
+  "dak_mi_4": {
+    "MNDBT": {"gia_tri": 258.00, "tu": "01-01", "den": "12-31", "ap_dung": "cả năm"},
+    "muc_nuoc_cao_nhat_truoc_lu": {"gia_tri": 255.00, "tu": null, "den": null, "ap_dung": "can_xac_nhan_theo_QD1865"},
+    "muc_nuoc_don_lu": {"gia_tri": 251.50, "tu": null, "den": null, "ap_dung": "can_xac_nhan_theo_QD1865"}
+  },
+  "song_bung_4": {
+    "MNDBT": {"gia_tri": 222.50, "tu": "01-01", "den": "12-31", "ap_dung": "cả năm"},
+    "muc_nuoc_cao_nhat_truoc_lu": {"gia_tri": 217.50, "tu": null, "den": null, "ap_dung": "can_xac_nhan_theo_QD1865"},
+    "muc_nuoc_don_lu": {"gia_tri": 216.00, "tu": null, "den": null, "ap_dung": "can_xac_nhan_theo_QD1865"}
+  },
+  "song_tranh_2": {
+    "MNDBT": {"gia_tri": 175.00, "tu": "01-01", "den": "12-31", "ap_dung": "cả năm"},
+    "muc_nuoc_cao_nhat_truoc_lu": {"gia_tri": 172.00, "tu": null, "den": null, "ap_dung": "can_xac_nhan_theo_QD1865"},
+    "muc_nuoc_don_lu": {"gia_tri": 165.00, "tu": null, "den": null, "ap_dung": "can_xac_nhan_theo_QD1865"}
+  }
+}

@@ -1,0 +1,341 @@
+{
+  "ngay_huan_luyen": "2026-10-01 14:59:14",
+  "du_lieu_nguon": {
+    "van_hanh": "vanhanhthuydien.xls",
+    "van_hanh_sha256": "fe30eb52a6ce4068c22a7bac9240073193c92890ce7819ea7d32744921361524",
+    "mua": {
+      "a_vuong": "mua_data/mua_a_vuong.csv",
+      "dak_mi_4": "mua_data/mua_dak_mi_4.csv",
+      "song_bung_4": "mua_data/mua_song_bung_4.csv",
+      "song_tranh_2": "mua_data/mua_song_tranh_2.csv"
+    },
+    "ngoai_le_thu_cong": "ngoai_le_thu_cong.csv",
+    "khoang_du_lieu_sau_lam_sach": "2024-06-01 00:00 → 2026-01-01 06:00"
+  },
+  "muc_tieu": {
+    "hoi_quy": "mn(t+H) - mn(t) (m)",
+    "phan_loai": "1 nếu mn(t+H) - mn(t) > 0.3 m",
+    "nguong_dang_nhanh_m": 0.3,
+    "nguong_xac_suat_xgb": 0.5
+  },
+  "tam_du_bao_gio": [
+    1,
+    3,
+    6
+  ],
+  "dac_trung": [
+    "mn",
+    "den",
+    "may",
+    "tran",
+    "mua",
+    "mn_tre1",
+    "mn_tre2",
+    "mn_tre3",
+    "mn_tre6",
+    "mn_tre12",
+    "mn_tre24",
+    "mn_tre48",
+    "mua_tre1",
+    "mua_tre2",
+    "mua_tre3",
+    "mua_tre6",
+    "mua_tre12",
+    "mua_tre24",
+    "mua_tre48",
+    "den_tre1",
+    "den_tre2",
+    "den_tre3",
+    "den_tre6",
+    "den_tre12",
+    "den_tre24",
+    "den_tre48",
+    "tran_tre1",
+    "tran_tre2",
+    "tran_tre3",
+    "tran_tre6",
+    "tran_tre12",
+    "tran_tre24",
+    "tran_tre48",
+    "mua_tl3",
+    "mua_tl6",
+    "mua_tl12",
+    "mua_tl24",
+    "mua_tl48",
+    "mua_tl72",
+    "mua_tl168",
+    "dang_mn1",
+    "dang_mn3",
+    "dang_mn6",
+    "dang_den3",
+    "dang_tran3",
+    "gio",
+    "thang"
+  ],
+  "so_gio_toi_thieu_dau_vao": 170,
+  "lam_sach": {
+    "bo_trung_moc_gio": "xl.bo_trung_moc_gio: mỗi hồ chọn bản ghi có mực nước gần trung bình giờ trước/sau (giờ kề bên không mâu thuẫn), không xác định hoặc hoà -> bản xuất hiện sau cùng; lấy nguyên 4 cột vận hành của hồ",
+    "ngay_bat_dau": "2024-06-01",
+    "pham_vi_muc_nuoc": {
+      "a_vuong": [
+        300,
+        381
+      ],
+      "dak_mi_4": [
+        200,
+        259
+      ],
+      "song_bung_4": [
+        180,
+        223.5
+      ],
+      "song_tranh_2": [
+        130,
+        176
+      ]
+    },
+    "luu_luong_toi_da": 20000,
+    "noi_suy_toi_da_gio": 6,
+    "gai_lech_m": 0.8,
+    "gai_quay_ve_m": 0.5
+  },
+  "tham_so": {
+    "hoi_quy": "make_pipeline(StandardScaler(), LinearRegression())",
+    "xgb": {
+      "colsample_bytree": 0.8,
+      "eval_metric": "logloss",
+      "learning_rate": 0.05,
+      "max_depth": 5,
+      "n_estimators": 500,
+      "random_state": 42,
+      "subsample": 0.8,
+      "scale_pos_weight": "số mẫu 0 / số mẫu 1 trên toàn bộ dữ liệu"
+    }
+  },
+  "phien_ban": {
+    "python": "3.12.6",
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "scikit-learn": "1.6.1",
+    "xgboost": "3.4.1",
+    "joblib": "1.4.2"
+  },
+  "mo_hinh": {
+    "a_vuong": {
+      "ten": "A Vương",
+      "1h": {
+        "hoi_quy": {
+          "file": "final_hoi_quy_a_vuong_1h.joblib",
+          "sha256": "458bcbaf937957f4b0e48d42e1a7296a030f848419aa27d9316e5a7a736eb254"
+        },
+        "xgb": {
+          "file": "final_xgb_a_vuong_1h.joblib",
+          "sha256": "2d2fcac104ed86c9c91bbc22653b8eef4801322a232b816be774888b304c85fd",
+          "scale_pos_weight": 368.72972972972974,
+          "da_danh_gia": true,
+          "ghi_chu": ""
+        },
+        "so_mau": 13680,
+        "so_ca_duong": 37,
+        "du_lieu_tu": "2024-06-07 23:00",
+        "du_lieu_den": "2025-12-31 23:00"
+      },
+      "3h": {
+        "hoi_quy": {
+          "file": "final_hoi_quy_a_vuong_3h.joblib",
+          "sha256": "c0fe7a546fed753de655763396f28b5fb7a8a1e4aa00aff926138a1e655a3ed0"
+        },
+        "xgb": {
+          "file": "final_xgb_a_vuong_3h.joblib",
+          "sha256": "fbb6a316bb3bcbf10c09015a6c580231cb06c48050905e0d73fbcbf3079cbbd6",
+          "scale_pos_weight": 77.16,
+          "da_danh_gia": true,
+          "ghi_chu": ""
+        },
+        "so_mau": 13678,
+        "so_ca_duong": 175,
+        "du_lieu_tu": "2024-06-07 23:00",
+        "du_lieu_den": "2025-12-31 23:00"
+      },
+      "6h": {
+        "hoi_quy": {
+          "file": "final_hoi_quy_a_vuong_6h.joblib",
+          "sha256": "22e3e35fb44b06816cca38282e99c406e7db84991b7a78e19b7b5e44271e1f65"
+        },
+        "xgb": {
+          "file": "final_xgb_a_vuong_6h.joblib",
+          "sha256": "5e68813fe21b17103cf4442846154b7eb32238a67629ff09db6a39fb6ab60c29",
+          "scale_pos_weight": 30.436781609195403,
+          "da_danh_gia": true,
+          "ghi_chu": ""
+        },
+        "so_mau": 13675,
+        "so_ca_duong": 435,
+        "du_lieu_tu": "2024-06-07 23:00",
+        "du_lieu_den": "2025-12-31 23:00"
+      }
+    },
+    "dak_mi_4": {
+      "ten": "Đăk Mi 4",
+      "1h": {
+        "hoi_quy": {
+          "file": "final_hoi_quy_dak_mi_4_1h.joblib",
+          "sha256": "4b06c5f3d59ac946a510d278a19f660edbf0e6bfc619edcc1b3712e1b11c4b64"
+        },
+        "xgb": {
+          "file": "final_xgb_dak_mi_4_1h.joblib",
+          "sha256": "04a91ccb3ef90c1bd50212c7ca083bb7fc4be23bd936190f98a77c67d28d4def",
+          "scale_pos_weight": 380.3611111111111,
+          "da_danh_gia": true,
+          "ghi_chu": ""
+        },
+        "so_mau": 13729,
+        "so_ca_duong": 36,
+        "du_lieu_tu": "2024-06-07 23:00",
+        "du_lieu_den": "2025-12-31 23:00"
+      },
+      "3h": {
+        "hoi_quy": {
+          "file": "final_hoi_quy_dak_mi_4_3h.joblib",
+          "sha256": "a7fc715f82073f9c6261852a8c3a90ab29253e85ecddbf33f25ccf3a94f41b69"
+        },
+        "xgb": {
+          "file": "final_xgb_dak_mi_4_3h.joblib",
+          "sha256": "b3a3dafe527d2fda05b530638b590100106c5622d1077e7467af8f1346ef861a",
+          "scale_pos_weight": 94.34027777777777,
+          "da_danh_gia": true,
+          "ghi_chu": ""
+        },
+        "so_mau": 13729,
+        "so_ca_duong": 144,
+        "du_lieu_tu": "2024-06-07 23:00",
+        "du_lieu_den": "2025-12-31 23:00"
+      },
+      "6h": {
+        "hoi_quy": {
+          "file": "final_hoi_quy_dak_mi_4_6h.joblib",
+          "sha256": "17414c08044ae2bbd690152443a01d69b66112bf32ea0823eb468b3bd792e0b9"
+        },
+        "xgb": {
+          "file": "final_xgb_dak_mi_4_6h.joblib",
+          "sha256": "daa44687cc3870f23aa9511f9157ab4dc5902ce13003c1c834349ad41f2068be",
+          "scale_pos_weight": 37.782485875706215,
+          "da_danh_gia": true,
+          "ghi_chu": ""
+        },
+        "so_mau": 13729,
+        "so_ca_duong": 354,
+        "du_lieu_tu": "2024-06-07 23:00",
+        "du_lieu_den": "2025-12-31 23:00"
+      }
+    },
+    "song_bung_4": {
+      "ten": "Sông Bung 4",
+      "1h": {
+        "hoi_quy": {
+          "file": "final_hoi_quy_song_bung_4_1h.joblib",
+          "sha256": "d6f493df308f95793d05ed48a3be1b4680e400afd3e821f9d460f7b8d167b0c1"
+        },
+        "xgb": {
+          "file": "final_xgb_song_bung_4_1h.joblib",
+          "sha256": "f1e48e296b8f92cb7822c11a6081e1589940fd95a68935d9bfa0c3e47a5429ca",
+          "scale_pos_weight": 1363.7,
+          "da_danh_gia": false,
+          "ghi_chu": "Không đủ dữ liệu khi đánh giá (ca dương: train 4, test 6); XGBoost tầm này chưa được kiểm chứng, du_bao.py sẽ không dùng nó cho phương án B."
+        },
+        "so_mau": 13647,
+        "so_ca_duong": 10,
+        "du_lieu_tu": "2024-06-07 23:00",
+        "du_lieu_den": "2025-12-31 23:00"
+      },
+      "3h": {
+        "hoi_quy": {
+          "file": "final_hoi_quy_song_bung_4_3h.joblib",
+          "sha256": "cf7a4df0e2027cf2a45252f9d694ffb5cf48af8741234d91296f5e846852cebd"
+        },
+        "xgb": {
+          "file": "final_xgb_song_bung_4_3h.joblib",
+          "sha256": "0656887f2bca9125d6e548a974ff8234d4c18b5e2fa920bbc113f00c36b590fe",
+          "scale_pos_weight": 104.7751937984496,
+          "da_danh_gia": true,
+          "ghi_chu": ""
+        },
+        "so_mau": 13645,
+        "so_ca_duong": 129,
+        "du_lieu_tu": "2024-06-07 23:00",
+        "du_lieu_den": "2025-12-31 23:00"
+      },
+      "6h": {
+        "hoi_quy": {
+          "file": "final_hoi_quy_song_bung_4_6h.joblib",
+          "sha256": "65dd07c6c854a7ac744fc2e829f1a6a1e8f30a9eb566c9b1157ef02d6fd4259b"
+        },
+        "xgb": {
+          "file": "final_xgb_song_bung_4_6h.joblib",
+          "sha256": "3444500cf28a147111ac5e72657e8e27df8d9c411c759d63572c67b92ccd0ebd",
+          "scale_pos_weight": 44.473333333333336,
+          "da_danh_gia": true,
+          "ghi_chu": ""
+        },
+        "so_mau": 13642,
+        "so_ca_duong": 300,
+        "du_lieu_tu": "2024-06-07 23:00",
+        "du_lieu_den": "2025-12-31 23:00"
+      }
+    },
+    "song_tranh_2": {
+      "ten": "Sông Tranh 2",
+      "1h": {
+        "hoi_quy": {
+          "file": "final_hoi_quy_song_tranh_2_1h.joblib",
+          "sha256": "88cee4ee168163beb6e11c21b444e525f481f9eddf0ac00ea0b290b8c9a38a84"
+        },
+        "xgb": {
+          "file": "final_xgb_song_tranh_2_1h.joblib",
+          "sha256": "e39280721f89bea766bfac771773ee235081bcabdf97ba39520efaac86f616a1",
+          "scale_pos_weight": 293.4782608695652,
+          "da_danh_gia": true,
+          "ghi_chu": ""
+        },
+        "so_mau": 13546,
+        "so_ca_duong": 46,
+        "du_lieu_tu": "2024-06-07 23:00",
+        "du_lieu_den": "2025-12-31 23:00"
+      },
+      "3h": {
+        "hoi_quy": {
+          "file": "final_hoi_quy_song_tranh_2_3h.joblib",
+          "sha256": "782e9cfa5bbec7599a20aaf21372409356e8005b304999a4662348ef25695ae7"
+        },
+        "xgb": {
+          "file": "final_xgb_song_tranh_2_3h.joblib",
+          "sha256": "97771dd1af94471f09e025b54f1cdca135d04dfaf161f83d5c29d004e16ce018",
+          "scale_pos_weight": 66.7,
+          "da_danh_gia": true,
+          "ghi_chu": ""
+        },
+        "so_mau": 13540,
+        "so_ca_duong": 200,
+        "du_lieu_tu": "2024-06-07 23:00",
+        "du_lieu_den": "2025-12-31 23:00"
+      },
+      "6h": {
+        "hoi_quy": {
+          "file": "final_hoi_quy_song_tranh_2_6h.joblib",
+          "sha256": "c3150c26eb50c41435f52c142dbe90ad05f9c5a736e4ade71b5d47b91d1ce4fc"
+        },
+        "xgb": {
+          "file": "final_xgb_song_tranh_2_6h.joblib",
+          "sha256": "00628050a0e3868e53f776c76d1eab0312e96bc03b6f726309d6471e847c8c5a",
+          "scale_pos_weight": 29.002217294900223,
+          "da_danh_gia": true,
+          "ghi_chu": ""
+        },
+        "so_mau": 13531,
+        "so_ca_duong": 451,
+        "du_lieu_tu": "2024-06-07 23:00",
+        "du_lieu_den": "2025-12-31 23:00"
+      }
+    }
+  }
+}

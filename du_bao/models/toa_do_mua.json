@@ -1,0 +1,90 @@
+{
+  "_ghi_chu": [
+    "Tọa độ [vĩ độ, kinh độ] các điểm lấy mưa của từng hồ; mưa hồ = trung bình số học các điểm.",
+    "Dữ liệu huấn luyện (mua_data/*.csv) được tải từ https://archive-api.open-meteo.com/v1/archive, hourly=precipitation, timezone=Asia/Bangkok, không chỉ định model (Best Match) — theo người dùng, 01/10/2026.",
+    "Asia/Bangkok = UTC+7, trùng giờ Việt Nam (khớp chu kỳ mưa trong dữ liệu: đỉnh 13–15h)."
+  ],
+  "mui_gio": "Asia/Bangkok",
+  "so_diem_ky_vong": {
+    "a_vuong": 5,
+    "dak_mi_4": 4,
+    "song_bung_4": 4,
+    "song_tranh_2": 4
+  },
+  "a_vuong": [
+    [
+      15.82,
+      107.62
+    ],
+    [
+      15.88,
+      107.64
+    ],
+    [
+      15.92,
+      107.62
+    ],
+    [
+      15.89,
+      107.55
+    ],
+    [
+      15.86,
+      107.48
+    ]
+  ],
+  "dak_mi_4": [
+    [
+      15.42,
+      107.87
+    ],
+    [
+      15.37,
+      107.85
+    ],
+    [
+      15.3,
+      107.82
+    ],
+    [
+      15.23,
+      107.81
+    ]
+  ],
+  "song_bung_4": [
+    [
+      15.72,
+      107.52
+    ],
+    [
+      15.73,
+      107.46
+    ],
+    [
+      15.74,
+      107.4
+    ],
+    [
+      15.76,
+      107.34
+    ]
+  ],
+  "song_tranh_2": [
+    [
+      15.34,
+      108.1
+    ],
+    [
+      15.28,
+      108.14
+    ],
+    [
+      15.2,
+      108.1
+    ],
+    [
+      15.15,
+      108.05
+    ]
+  ]
+}

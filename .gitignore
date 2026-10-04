@@ -1,0 +1,29 @@
+# Bí mật / môi trường
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node / frontend
+node_modules/
+frontend/dist/
+
+# Dữ liệu lớn (không commit)
+kho_du_lieu/
+ket_qua/
+media/
+*.xls
+*.lock
+
+# Hệ điều hành / editor
+.DS_Store
+.vscode/
+.idea/
