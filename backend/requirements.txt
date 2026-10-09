@@ -4,3 +4,9 @@ djangorestframework-simplejwt>=5.5,<5.6
 psycopg[binary]>=3.2
 django-cors-headers>=4.9
 python-dotenv>=1.0
+# Forecast module du_bao/ (same versions as training: see du_bao/requirements.txt)
+numpy==1.26.4
+pandas==2.2.3
+scikit-learn==1.6.1
+xgboost==3.4.1
+joblib==1.4.2

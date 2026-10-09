@@ -18,6 +18,7 @@ frontend/dist/
 
 # Dữ liệu lớn (không commit)
 kho_du_lieu/
+backend/logs/
 ket_qua/
 media/
 *.xls

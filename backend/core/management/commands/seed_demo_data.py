@@ -1,4 +1,5 @@
 """DEMO DATA ONLY: sample accounts and rescue teams to try the system. Do not use in production."""
+from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
@@ -28,6 +29,11 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args, **opts):
+        if not settings.DEBUG:
+            raise CommandError(
+                "TỪ CHỐI tạo dữ liệu demo vì DJANGO_DEBUG=false (môi trường triển khai thật). "
+                "Tài khoản demo dùng mật khẩu công khai trong README, ai cũng đăng nhập được. "
+                "Chỉ chạy lệnh này trên máy phát triển với DJANGO_DEBUG=true.")
         if Ward.objects.count() < 94:
             raise CommandError("Chưa nạp phường/xã. Chạy: python manage.py load_wards")
         teams = []

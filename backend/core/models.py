@@ -52,6 +52,9 @@ class AuditLog(models.Model):
         ROLE_CHANGED = "role_changed", "Đổi vai trò"
         PASSWORD_RESET_BY_ADMIN = "password_reset_by_admin", "Admin đặt lại mật khẩu"
         CONFIG_CHANGED = "config_changed", "Sửa cấu hình"
+        THRESHOLD_CHANGED = "threshold_changed", "Sửa ngưỡng quy định"
+        DIRECTIVE_CREATED = "directive_created", "Thêm chỉ đạo điều hành"
+        DIRECTIVE_DEACTIVATED = "directive_deactivated", "Đánh dấu chỉ đạo hết hiệu lực"
 
     created_at = models.DateTimeField("thời điểm", auto_now_add=True, db_index=True)
     actor = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="người thực hiện",

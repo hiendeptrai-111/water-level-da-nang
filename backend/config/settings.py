@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     "catalog",
     "accounts",
     "core",
+    "reservoirs",
+    "alerts",
 ]
 
 MIDDLEWARE = [
@@ -148,8 +150,14 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", "Canh bao lu Da Nang <no-reply@lo
 # Used to build links in emails (verify email, reset password).
 FRONTEND_URL = env("FRONTEND_URL", "http://localhost:5173").rstrip("/")
 
-# Forecast modules copied from the research folder (used from phase 2).
+# Forecast modules copied from the research folder (du_bao/, never edited).
 FORECAST_DIR = Path(env("FORECAST_DIR", str(PROJECT_DIR / "du_bao")))
+# Data store copied from the research folder (git-ignored): van_hanh/, mua_data/,
+# ngoai_le_thu_cong.csv, plus raw Open-Meteo downloads in mua_tai_them/.
+DATA_STORE_DIR = Path(env("DATA_STORE_DIR", str(PROJECT_DIR / "kho_du_lieu")))
+# Sent with every request to the PCTT portal and Open-Meteo.
+HTTP_USER_AGENT = env("HTTP_USER_AGENT",
+                      "water-level-da-nang/2.0 (do an canh bao lu Da Nang; 1 lan/gio)")
 
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

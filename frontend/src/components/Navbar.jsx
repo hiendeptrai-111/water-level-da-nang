@@ -2,21 +2,29 @@ import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { ROLE_LABELS, homePathFor } from '../auth/roles'
+import NotificationBell from './NotificationBell'
 
 // Menu items by role. Pages of later phases are added when they exist.
 const MENUS = {
-  guest: [{ to: '/', label: 'Trang chủ', end: true }],
+  guest: [
+    { to: '/', label: 'Trang chủ', end: true },
+    { to: '/alerts', label: 'Cảnh báo' },
+  ],
   citizen: [
     { to: '/', label: 'Trang chủ', end: true },
+    { to: '/alerts', label: 'Cảnh báo' },
     { to: '/account', label: 'Tài khoản' },
   ],
   rescue_team: [
     { to: '/rescue/tasks', label: 'Nhiệm vụ' },
     { to: '/', label: 'Trang chủ', end: true },
+    { to: '/alerts', label: 'Cảnh báo' },
     { to: '/account', label: 'Tài khoản' },
   ],
   admin: [
     { to: '/admin', label: 'Bảng điều khiển', end: true },
+    { to: '/admin/alerts', label: 'Lịch sử cảnh báo' },
+    { to: '/admin/thresholds', label: 'Ngưỡng' },
     { to: '/admin/users', label: 'Người dùng' },
     { to: '/', label: 'Trang chủ', end: true },
     { to: '/account', label: 'Tài khoản' },
@@ -42,6 +50,7 @@ export default function Navbar() {
           <img src="/favicon.svg" alt="" width="28" height="28" />
           <span>Cảnh báo lũ Đà Nẵng</span>
         </Link>
+        {user && <NotificationBell />}
         <button className="navbar__toggle" aria-expanded={open} aria-controls="main-menu"
           onClick={() => setOpen((o) => !o)}>
           <span className="sr-only">Mở menu</span>☰
