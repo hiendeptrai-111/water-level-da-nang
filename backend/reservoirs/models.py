@@ -28,6 +28,10 @@ class Reservoir(models.Model):
     longitude = models.DecimalField("kinh độ đập", max_digits=9, decimal_places=6,
                                     null=True, blank=True)
     display_order = models.PositiveSmallIntegerField("thứ tự hiển thị", default=0)
+    coord_source = models.CharField("nguồn tọa độ đập", max_length=255, blank=True)
+    coord_needs_verification = models.BooleanField(
+        "tọa độ cần xác minh", default=False,
+        help_text="Tọa độ gần đúng (không tìm được đối tượng đập trên OpenStreetMap): admin kiểm tra và sửa.")
 
     class Meta:
         verbose_name = "hồ chứa"
@@ -91,6 +95,22 @@ class OperationRecord(models.Model):
 
     def __str__(self):
         return f"{self.reservoir} {localtime(self.time):%d/%m/%Y %H:%M}"
+
+
+class RiverFlow(models.Model):
+    """Hourly flow towards the two river branches, from the same PCTT operating table
+    (columns q_vugia, q_thubon of the data store)."""
+    time = models.DateTimeField("thời điểm", unique=True)
+    vu_gia = models.FloatField("Q về Vu Gia (m³/s)", null=True, blank=True)
+    thu_bon = models.FloatField("Q về Thu Bồn (m³/s)", null=True, blank=True)
+
+    class Meta:
+        verbose_name = "lưu lượng về hạ du"
+        verbose_name_plural = "lưu lượng về hạ du"
+        ordering = ["time"]
+
+    def __str__(self):
+        return f"{localtime(self.time):%d/%m/%Y %H:%M}"
 
 
 class Rainfall(models.Model):
@@ -252,6 +272,7 @@ class UpdateRun(models.Model):
         SUSPICIOUS_FLAGS = "suspicious_flags", "Đánh dấu số liệu nghi ngờ"
         FORECAST = "forecast", "Dự báo"
         ALERTS = "alerts", "Cảnh báo và thông báo"
+        WEATHER = "weather", "Thời tiết phường/xã (Open-Meteo)"
 
     run_id = models.UUIDField("lần chạy", db_index=True)
     kind = models.CharField("loại", max_length=10, choices=Kind.choices, default=Kind.LIVE)

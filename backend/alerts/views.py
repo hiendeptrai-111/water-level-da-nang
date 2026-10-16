@@ -31,10 +31,16 @@ class PublicAlertListView(APIView):
     def get(self, request):
         simulation, at = view_mode(request)
         now = at or timezone.now()
-        qs = active_at(Alert.objects.filter(is_simulation=simulation, level__in=PUBLIC_LEVELS), now)
-        alerts = list(qs.prefetch_related("reservoirs", "wards"))
+        qs = Alert.objects.filter(is_simulation=simulation, level__in=PUBLIC_LEVELS)
+        if at is None:
+            qs = active_at(qs, now)
+        else:   # replay viewed at `at`: validity as it was then, not the final one
+            qs = qs.filter(starts_at__lte=at).filter(Q(ended_at__isnull=True) | Q(ended_at__gt=at))
+        alerts = [a for a in qs.prefetch_related("reservoirs", "wards")
+                  if at is None or (a.valid_until_at(at) and a.valid_until_at(at) > at)]
         ward_id = getattr(request.user, "ward_id", None) if request.user.is_authenticated else None
-        data = PublicAlertSerializer(alerts, many=True, context={"ward_id": ward_id}).data
+        data = PublicAlertSerializer(alerts, many=True,
+                                     context={"ward_id": ward_id, "at": at}).data
         data = sorted(data, key=lambda a: (not a["in_my_ward"],
                                            -PUBLIC_LEVELS.index(a["level"]), a["starts_at"]))
         return Response(local({"simulation": simulation, "at": at, "alerts": data}))

@@ -158,3 +158,22 @@ class ReplayTests(ReservoirTestCase):
         self.assertTrue(all(r["simulation"] for r in res["reservoirs"]))
         live = self.client.get("/api/reservoirs/").json()
         self.assertFalse(any(r["forecast_available"] for r in live["reservoirs"]))
+
+
+class WeatherFailureDoesNotStopForecasts(ReservoirTestCase):
+    """Phase 3, criterion d: a weather error never stops the reservoir forecasts."""
+
+    def test_weather_error_is_isolated(self):
+        from unittest import mock
+
+        from reservoirs.models import UpdateRun
+        from reservoirs.pipeline import run_live
+        with mock.patch("weather.services.update", side_effect=RuntimeError("Open-Meteo hỏng")):
+            run = run_live(skip_portal=True, skip_rain=True)
+        self.assertEqual(run.failures, 1)
+        self.assertEqual(Forecast.objects.filter(is_simulation=False, issued_at=aware(END)).count(), 12)
+        weather = UpdateRun.objects.get(run_id=run.id, step=UpdateRun.Step.WEATHER)
+        self.assertFalse(weather.success)
+        self.assertIn("Open-Meteo hỏng", weather.error)
+        self.assertTrue(UpdateRun.objects.filter(run_id=run.id, step=UpdateRun.Step.FORECAST,
+                                                 success=True).count() == 4)

@@ -11,7 +11,7 @@ from core.services import get_config
 from .forecasting import (FIELD_FROM_COLUMN, LEVEL_FROM_MODEL, LOCAL_TZ, model_info, modules,
                           patched)
 from .models import (AlertLevel, Forecast, OperatingDirective, OperationRecord, Rainfall,
-                     RegulatoryThreshold, Reservoir)
+                     RegulatoryThreshold, Reservoir, RiverFlow)
 
 BATCH = 5000
 
@@ -43,7 +43,20 @@ def sync_operation_records(store, since=None):
             objs, batch_size=BATCH, update_conflicts=True, unique_fields=["reservoir", "time"],
             update_fields=list(FIELD_FROM_COLUMN.values()))
         written[res.code] = len(objs)
+    flows = store[["q_vugia", "q_thubon"]].dropna(how="all")
+    RiverFlow.objects.bulk_create(
+        [RiverFlow(time=t, vu_gia=_num(a), thu_bon=_num(b))
+         for t, (a, b) in zip(_aware_index(flows.index), flows.itertuples(index=False))],
+        batch_size=BATCH, update_conflicts=True, unique_fields=["time"],
+        update_fields=["vu_gia", "thu_bon"])
+    written["river_flows"] = len(flows)
     return written
+
+
+def river_flows(at=None):
+    """Latest 'Q về Vu Gia' / 'Q về Thu Bồn' at or before `at`."""
+    row = RiverFlow.objects.filter(time__lte=at or timezone.now()).order_by("-time").first()
+    return {"time": row.time, "vu_gia": row.vu_gia, "thu_bon": row.thu_bon} if row else None
 
 
 def compute_suspicious(store, log=None):
@@ -223,6 +236,10 @@ def reservoir_status(reservoir, *, at=None, simulation=False, with_forecast=Fals
         "alert_level_label": AlertLevel(level).label if level else None,
         "trend": _trend(rows) if available else None,
         "thresholds": threshold_block(reservoir, local_now.date()),
+        "threshold_periods": [{"kind": t.kind, "start_day": t.start_day, "end_day": t.end_day,
+                               "value_low": t.value_low, "value_high": t.value_high}
+                              for t in reservoir.thresholds.all()],
+        "coord_needs_verification": reservoir.coord_needs_verification,
         "directives": [directive_dict(d) for d in active_directives(reservoir)],
         "simulation": simulation,
     }

@@ -176,7 +176,15 @@ def step_forecast_and_alerts(run, t=None, force=False):
                                                        simulation=False, send_email=True)
 
 
-def run_live(out=None, force=False, skip_portal=False, skip_rain=False):
+def step_weather(run):
+    """Phase 3 (CN13, CN14). Runs after the reservoir steps, in its own step: a weather error
+    is recorded in UpdateRun and never stops (nor rolls back) the reservoir forecasts."""
+    from weather.services import update
+    with run.step(UpdateRun.Step.WEATHER) as d:
+        d.update(update())
+
+
+def run_live(out=None, force=False, skip_portal=False, skip_rain=False, skip_weather=False):
     run = Run(UpdateRun.Kind.LIVE, out)
     if not skip_portal:
         step_reservoir_data(run, force=force)
@@ -185,6 +193,8 @@ def run_live(out=None, force=False, skip_portal=False, skip_rain=False):
         step_rain_forecast(run)
     step_suspicious(run)
     step_forecast_and_alerts(run, force=force)
+    if not skip_weather:
+        step_weather(run)
     return run
 
 

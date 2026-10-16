@@ -16,3 +16,13 @@ class RescueTeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = RescueTeam
         fields = ["id", "name", "phone_number", "vehicles"]
+
+
+class WardCoordinatesSerializer(serializers.ModelSerializer):
+    latitude = serializers.DecimalField(max_digits=9, decimal_places=6, allow_null=True, required=True)
+    longitude = serializers.DecimalField(max_digits=9, decimal_places=6, allow_null=True, required=True)
+
+    class Meta:
+        model = Ward
+        fields = ["id", "name", "kind", "latitude", "longitude", "coord_confidence", "coord_source"]
+        read_only_fields = ["id", "name", "kind", "coord_confidence", "coord_source"]

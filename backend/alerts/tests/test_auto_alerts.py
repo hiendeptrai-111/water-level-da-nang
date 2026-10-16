@@ -158,3 +158,34 @@ class NotificationApiTests(AutoAlertTests):
         self.assertEqual(len(alerts), 1)
         self.assertTrue(alerts[0]["in_my_ward"])
         self.assertNotIn("issued_by", alerts[0])
+
+
+class ReplayValidityTests(AutoAlertTests):
+    """A replay viewed at time T shows the validity the alert had at T."""
+
+    def test_valid_until_at_view_time(self):
+        for _ in range(6):                       # warning h0..h5, extended every hour
+            self.step("warning", simulation=True)
+        alert = Alert.objects.get()
+        t0 = to_aware(pd.Timestamp(T0))
+        self.assertEqual(alert.valid_until, t0 + timedelta(hours=5 + 3))       # final value
+        for h in (0, 2):
+            at = (t0 + timedelta(hours=h, minutes=30))
+            res = self.client.get("/api/alerts/", {"simulation": 1,
+                                                   "at": to_naive_local(at).strftime("%Y-%m-%dT%H:%M")})
+            got = res.json()["alerts"]
+            self.assertEqual(len(got), 1)
+            self.assertEqual(pd.Timestamp(got[0]["valid_until"]), pd.Timestamp(t0 + timedelta(hours=h + 3)))
+            self.assertIsNone(got[0]["ended_at"])
+
+    def test_ended_later_is_not_ended_yet(self):
+        self.step("warning", simulation=True)    # h0
+        self.step("warning", simulation=True)    # h1
+        self.step("normal", simulation=True)     # h2: ends
+        t0 = to_aware(pd.Timestamp(T0))
+        at = to_naive_local(t0 + timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M")
+        got = self.client.get("/api/alerts/", {"simulation": 1, "at": at}).json()["alerts"]
+        self.assertEqual(len(got), 1)
+        self.assertIsNone(got[0]["ended_at"])
+        later = to_naive_local(t0 + timedelta(hours=2)).strftime("%Y-%m-%dT%H:%M")
+        self.assertEqual(self.client.get("/api/alerts/", {"simulation": 1, "at": later}).json()["alerts"], [])

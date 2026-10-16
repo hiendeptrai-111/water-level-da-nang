@@ -9,12 +9,13 @@ import { useAuth } from '../auth/AuthContext'
 import Alert from '../components/Alert'
 import LevelBadge from '../components/LevelBadge'
 import SimulationBar from '../components/SimulationBar'
+import { useTheme } from '../theme/ThemeContext'
+import { THEMES } from '../theme/themes'
+import DamCrossSection from '../dam/DamCrossSection'
 import Spinner from '../components/Spinner'
 import { dateTime, num, shortDateTime, signed, toLocalDate } from '../utils/format'
 
 const MAX_DAYS = 90
-// Neutral, distinguishable colours for reference lines: never red (a threshold is not danger).
-const REF_COLORS = ['#5b4b8a', '#2f6f73', '#7a5c00', '#3d5a80']
 
 function comparisonText(c) {
   if (!c) return '—'
@@ -73,7 +74,10 @@ function ExportButton({ code, range, simulation }) {
 export default function ReservoirDetailPage() {
   const { code } = useParams()
   const { user } = useAuth()
-  const { params, simulation } = useViewMode()
+  const { params, simulation, at } = useViewMode()
+  const T = THEMES[useTheme().theme]
+  // reference lines in the cross-section colours: never the alert red (a threshold is not danger)
+  const REF_COLORS = [T.lineTruoc, T.lineDon, T.riverLabel, T.text2]
   const detail = usePolling(`/reservoirs/${code}/`, params, 5)
   const d = detail.data
   const [range, setRange] = useState({ from: '', to: '' })
@@ -117,15 +121,15 @@ export default function ReservoirDetailPage() {
       ? [{ y: t.value_low, label: t.kind_label }]
       : [{ y: t.value_low, label: `${t.kind_label} (cận dưới)` }, { y: t.value_high, label: `${t.kind_label} (cận trên)` }])),
     ...d.directives.map((x) => ({ y: x.target_level, label: `Mục tiêu điều hành: ${x.requirement_label.toLowerCase()} (${x.document})` })),
-    { y: d.normal_water_level, label: 'MNDBT' },
   ]
+  const mndbtLine = { y: d.normal_water_level, label: 'MNDBT' }
   const xAxis = (
     <XAxis dataKey="t" type="number" scale="time" domain={['dataMin', 'dataMax']} tickFormatter={shortDateTime} minTickGap={40} />
   )
   const tooltipTime = (v) => dateTime(v)
 
   return (
-    <div className="page">
+    <div className="page page--wide">
       <SimulationBar />
       <p><Link to={simulation ? `/?${new URLSearchParams(params)}` : '/'}>← Tổng quan</Link></p>
       <div className="page__head">
@@ -133,13 +137,8 @@ export default function ReservoirDetailPage() {
         <LevelBadge level={d.forecast_available ? d.alert_level : null} size="lg" />
       </div>
 
-      <dl className="meta">
-        <div><dt>Mực nước</dt><dd>{num(d.water_level)} m</dd></div>
-        <div><dt>So với MNDBT ({num(d.normal_water_level, 1)} m)</dt><dd>{d.distance_to_normal_m === null ? '—' : `${signed(d.distance_to_normal_m)} m`}</dd></div>
-        <div><dt>Lưu lượng đến</dt><dd>{num(d.inflow, 1)} m³/s</dd></div>
-        <div><dt>Qua máy / qua tràn</dt><dd>{num(d.turbine_flow, 1)} / {num(d.spillway_flow, 1)} m³/s</dd></div>
-        <div><dt>Số liệu lúc</dt><dd>{dateTime(d.data_time)}</dd></div>
-      </dl>
+      <p className="small muted">Số liệu lúc {dateTime(d.data_time)}</p>
+      <DamCrossSection r={d} viewDate={simulation && at ? new Date(at) : undefined} showDetailLink={false} />
       {d.stale && <Alert type="warning">Dữ liệu chưa được cập nhật (số liệu cũ hơn 2 giờ).</Alert>}
       {d.needs_confirmation && <Alert type="warning"><strong>Cần xác nhận dữ liệu:</strong> {d.confirmation_reason || 'số liệu giờ mới nhất bất thường, chờ xác nhận ở giờ sau.'}</Alert>}
 
@@ -227,12 +226,14 @@ export default function ReservoirDetailPage() {
                   <YAxis domain={['auto', 'auto']} width={56} tickFormatter={(v) => num(v, 1)} />
                   <Tooltip labelFormatter={tooltipTime} formatter={(v, n) => [`${num(v)} m`, n]} />
                   <Legend />
+                  <ReferenceLine y={mndbtLine.y} stroke={T.lineMain} ifOverflow="extendDomain"
+                    label={{ value: `MNDBT ${num(mndbtLine.y)}`, position: 'insideTopLeft', fontSize: 11, fill: T.lineMain }} />
                   {refLines.map((r, i) => (
                     <ReferenceLine key={r.label} y={r.y} stroke={REF_COLORS[i % REF_COLORS.length]} strokeDasharray="6 3" ifOverflow="extendDomain"
                       label={{ value: `${r.label} ${num(r.y)}`, position: 'insideTopLeft', fontSize: 11, fill: REF_COLORS[i % REF_COLORS.length] }} />
                   ))}
-                  <Line type="monotone" dataKey="wl" name="Mực nước đo" stroke="#0b4f8a" dot={false} connectNulls={false} isAnimationActive={false} />
-                  <Line type="linear" dataKey="fc" name="Dự báo" stroke="#0b4f8a" strokeDasharray="5 5" dot={{ r: 4 }} connectNulls isAnimationActive={false} />
+                  <Line type="monotone" dataKey="wl" name="Mực nước đo" stroke={T.river} dot={false} connectNulls={false} isAnimationActive={false} />
+                  <Line type="linear" dataKey="fc" name="Dự báo" stroke={T.text} strokeDasharray="5 5" dot={{ r: 4 }} connectNulls isAnimationActive={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -246,9 +247,9 @@ export default function ReservoirDetailPage() {
                   <YAxis width={56} />
                   <Tooltip labelFormatter={tooltipTime} formatter={(v, n) => [`${num(v, 1)} m³/s`, n]} />
                   <Legend />
-                  <Line type="monotone" dataKey="inflow" name="Lưu lượng đến" stroke="#0b4f8a" dot={false} isAnimationActive={false} />
-                  <Line type="monotone" dataKey="turbine" name="Qua máy" stroke="#2f6f73" dot={false} isAnimationActive={false} />
-                  <Line type="monotone" dataKey="spillway" name="Qua tràn" stroke="#a15c00" dot={false} isAnimationActive={false} />
+                  <Line type="monotone" dataKey="inflow" name="Lưu lượng đến" stroke={T.river} dot={false} isAnimationActive={false} />
+                  <Line type="monotone" dataKey="turbine" name="Qua máy" stroke={T.lineDon} dot={false} isAnimationActive={false} />
+                  <Line type="monotone" dataKey="spillway" name="Qua tràn" stroke={T.lineTruoc} dot={false} isAnimationActive={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -261,7 +262,7 @@ export default function ReservoirDetailPage() {
                   {xAxis}
                   <YAxis width={56} />
                   <Tooltip labelFormatter={tooltipTime} formatter={(v) => [`${num(v, 1)} mm`, 'Mưa']} />
-                  <Bar dataKey="rain" name="Mưa" fill="#3d7cc9" isAnimationActive={false} />
+                  <Bar dataKey="rain" name="Mưa" fill={T.river} isAnimationActive={false} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

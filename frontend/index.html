@@ -4,8 +4,21 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0b4f8a" />
+    <meta name="theme-color" content="#EEF2F6" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
     <title>Cảnh báo lũ Đà Nẵng</title>
+    <script>
+      // Set the theme before the first paint (same rule as src/theme/themeChoice.js):
+      // remembered choice, otherwise 06:00–17:59 light and dark outside those hours.
+      (function () {
+        var t = null
+        try { t = localStorage.getItem('wl.theme') } catch (e) { t = null }
+        if (t !== 'light' && t !== 'dark') { var h = new Date().getHours(); t = h >= 6 && h < 18 ? 'light' : 'dark' }
+        document.documentElement.dataset.theme = t
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "core",
     "reservoirs",
     "alerts",
+    "weather",
 ]
 
 MIDDLEWARE = [

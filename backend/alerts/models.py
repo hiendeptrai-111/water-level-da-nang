@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.conf import settings
 from django.db import models
 from django.utils.timezone import localtime
@@ -35,11 +37,31 @@ class Alert(models.Model):
     # exactly like live runs.
     last_notified_at = models.DateTimeField("thông báo gần nhất (giờ số liệu)",
                                             null=True, blank=True)
+    # [[forecast hour, valid_until], ...] appended at creation and at every extension, so a
+    # replay viewed at time T shows the validity the alert had at T (not the final one).
+    validity_history = models.JSONField("lịch sử gia hạn", default=list, blank=True)
 
     class Meta:
         verbose_name = "cảnh báo"
         verbose_name_plural = "cảnh báo"
         ordering = ["-starts_at", "-id"]
+
+    def record_validity(self, t, valid_until):
+        self.valid_until = valid_until
+        self.validity_history = [*self.validity_history, [t.isoformat(), valid_until.isoformat()]]
+
+    def valid_until_at(self, at):
+        """valid_until as it was at time `at` (falls back to the current value)."""
+        if at is None or not self.validity_history:
+            return self.valid_until
+        current = None
+        for t, until in self.validity_history:
+            if datetime.fromisoformat(t) <= at:
+                current = datetime.fromisoformat(until)
+        return current
+
+    def ended_at_view(self, at):
+        return self.ended_at if at is None or (self.ended_at and self.ended_at <= at) else None
 
     def __str__(self):
         names = ", ".join(r.name for r in self.reservoirs.all()) if self.pk else ""

@@ -1,8 +1,10 @@
 from rest_framework import mixins, viewsets
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.pagination import PageNumberPagination
 
 from accounts.permissions import IsAdminRole
 
+from .config_defaults import READ_ONLY_KEYS
 from .models import AuditLog, SystemConfig
 from .serializers import AuditLogSerializer, SystemConfigSerializer
 from .services import audit
@@ -19,6 +21,8 @@ class SystemConfigViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
     http_method_names = ["get", "patch", "head", "options"]
 
     def perform_update(self, serializer):
+        if serializer.instance.key in READ_ONLY_KEYS:
+            raise PermissionDenied("Giá trị gắn với mô hình đã huấn luyện, muốn đổi phải huấn luyện lại.")
         old = serializer.instance.value
         obj = serializer.save(updated_by=self.request.user)
         if old != obj.value:

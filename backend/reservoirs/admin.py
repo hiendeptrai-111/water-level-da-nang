@@ -1,5 +1,7 @@
 from django.contrib import admin
 
+from catalog.admin import audit_link
+
 from core.models import AuditLog
 from core.services import audit
 
@@ -22,8 +24,22 @@ class ReadOnlyAdmin(admin.ModelAdmin):
 
 @admin.register(Reservoir)
 class ReservoirAdmin(admin.ModelAdmin):
-    list_display = ("code", "name", "normal_water_level", "latitude", "longitude", "display_order")
-    readonly_fields = ("code", "model_key")
+    list_display = ("code", "name", "normal_water_level", "latitude", "longitude",
+                    "coord_needs_verification")
+    readonly_fields = ("code", "model_key", "coord_source")
+    fields = ("code", "model_key", "name", "normal_water_level", "latitude", "longitude",
+              "coord_source", "coord_needs_verification", "display_order")
+
+    def save_model(self, request, obj, form, change):
+        moved = change and {"latitude", "longitude"} & set(form.changed_data)
+        if moved:
+            obj.coord_source = f"Admin nhập ({request.user})"
+            obj.coord_needs_verification = False
+        super().save_model(request, obj, form, change)
+        if moved:
+            audit(AuditLog.Action.RESERVOIR_COORDS_CHANGED, actor=request.user, target=obj,
+                  request=request, details={"latitude": str(obj.latitude),
+                                            "longitude": str(obj.longitude), "via": "django-admin"})
 
     def has_delete_permission(self, request, obj=None):
         return False
@@ -31,8 +47,24 @@ class ReservoirAdmin(admin.ModelAdmin):
 
 @admin.register(ReservoirWard)
 class ReservoirWardAdmin(admin.ModelAdmin):
+    """CN25: zone and 'needs verification' of each reservoir – commune link (logged)."""
     list_display = ("reservoir", "ward", "zone", "needs_verification")
     list_filter = ("reservoir", "zone", "needs_verification")
+    list_editable = ("zone", "needs_verification")
+    search_fields = ("ward__name",)
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        audit_link(request, obj, "changed" if change else "created")
+
+    def delete_model(self, request, obj):
+        audit_link(request, obj, "deleted")
+        super().delete_model(request, obj)
+
+    def delete_queryset(self, request, queryset):
+        for obj in queryset:
+            audit_link(request, obj, "deleted")
+        super().delete_queryset(request, queryset)
 
 
 @admin.register(RegulatoryThreshold)

@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from .config_defaults import READ_ONLY_KEYS
 from .models import AuditLog, SystemConfig
 from .services import audit
 
@@ -15,6 +16,11 @@ class SystemConfigAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False
+
+    def has_change_permission(self, request, obj=None):
+        if obj is not None and obj.key in READ_ONLY_KEYS:
+            return False                  # shown, never edited (model-bound value)
+        return super().has_change_permission(request, obj)
 
     def save_model(self, request, obj, form, change):
         old = SystemConfig.objects.get(pk=obj.pk).value if obj.pk else None

@@ -20,7 +20,7 @@ from .models import (Forecast, OperatingDirective, OperationRecord, Rainfall,
                      RegulatoryThreshold, Reservoir, UpdateRun)
 from .pipeline import simulation_range
 from .serializers import DirectiveSerializer, ThresholdSerializer
-from .services import reservoir_queryset, reservoir_status
+from .services import reservoir_queryset, reservoir_status, river_flows
 
 
 # ---------------------------------------------------------------- query parameters
@@ -89,6 +89,7 @@ class ReservoirListView(PublicView):
             "at": at,
             "reservoirs": [reservoir_status(r, at=at, simulation=simulation)
                            for r in reservoir_queryset()],
+            "river_flows": river_flows(at),
         })
 
 

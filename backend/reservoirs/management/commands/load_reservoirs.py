@@ -6,9 +6,12 @@
 - Reservoir – commune links of Table B.1/B.2. Names are matched exactly against the Ward
   table; a name that does not match is listed and skipped, never guessed.
 """
+import csv
 import unicodedata
 from datetime import datetime
+from decimal import Decimal
 
+from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.utils import timezone
@@ -16,8 +19,9 @@ from django.utils import timezone
 from catalog.models import Ward
 from reservoirs.models import OperatingDirective, RegulatoryThreshold, Reservoir, ReservoirWard
 
-# code, du_bao key, name, MNDBT (m), display order. Dam coordinates are not in the spec:
-# left empty, to be entered by an admin (Django admin).
+# code, du_bao key, name, MNDBT (m), display order. Dam coordinates: data/dam_coordinates.csv
+# (fetch_dam_coordinates); coordinates edited by an admin are never overwritten.
+DAM_FILE = settings.BASE_DIR / "data" / "dam_coordinates.csv"
 RESERVOIRS = [
     ("av", "a_vuong", "A Vương", 380.0, 1),
     ("dm", "dak_mi_4", "Đăk Mi 4", 258.0, 2),
@@ -102,6 +106,20 @@ class Command(BaseCommand):
                 code=code, defaults={"model_key": key, "name": name, "normal_water_level": mndbt,
                                      "display_order": order})
         self.stdout.write(f"Hồ chứa: {Reservoir.objects.count()}")
+        if DAM_FILE.exists():
+            with open(DAM_FILE, encoding="utf-8") as f:
+                for r in csv.DictReader(line for line in f if not line.startswith("#")):
+                    obj = res.get(r["code"])
+                    if obj is None or obj.coord_source.startswith("Admin"):
+                        continue
+                    obj.latitude, obj.longitude = Decimal(r["latitude"]), Decimal(r["longitude"])
+                    obj.coord_source = r["source"][:255]
+                    obj.coord_needs_verification = r["needs_verification"] == "1"
+                    obj.save(update_fields=["latitude", "longitude", "coord_source",
+                                            "coord_needs_verification"])
+            check = [r.name for r in res.values() if r.coord_needs_verification]
+            self.stdout.write(f"Tọa độ đập: {DAM_FILE.name}"
+                              + (f"; cần xác minh: {', '.join(check)}" if check else ""))
 
         n = 0
         for kind, per_res in THRESHOLDS.items():

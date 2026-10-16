@@ -1,24 +1,28 @@
 import { useState } from 'react'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { ROLE_LABELS, homePathFor } from '../auth/roles'
 import NotificationBell from './NotificationBell'
+import ThemeToggle from '../theme/ThemeToggle'
 
 // Menu items by role. Pages of later phases are added when they exist.
 const MENUS = {
   guest: [
     { to: '/', label: 'Trang chủ', end: true },
     { to: '/alerts', label: 'Cảnh báo' },
+    { to: '/weather', label: 'Thời tiết' },
   ],
   citizen: [
     { to: '/', label: 'Trang chủ', end: true },
     { to: '/alerts', label: 'Cảnh báo' },
+    { to: '/weather', label: 'Thời tiết' },
     { to: '/account', label: 'Tài khoản' },
   ],
   rescue_team: [
     { to: '/rescue/tasks', label: 'Nhiệm vụ' },
     { to: '/', label: 'Trang chủ', end: true },
     { to: '/alerts', label: 'Cảnh báo' },
+    { to: '/weather', label: 'Thời tiết' },
     { to: '/account', label: 'Tài khoản' },
   ],
   admin: [
@@ -27,6 +31,7 @@ const MENUS = {
     { to: '/admin/thresholds', label: 'Ngưỡng' },
     { to: '/admin/users', label: 'Người dùng' },
     { to: '/', label: 'Trang chủ', end: true },
+    { to: '/weather', label: 'Thời tiết' },
     { to: '/account', label: 'Tài khoản' },
   ],
 }
@@ -35,6 +40,7 @@ export default function Navbar() {
   const { user, logout } = useAuth()
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
+  const onHome = useLocation().pathname === '/'      // the home top bar has its own toggle
 
   const items = MENUS[user?.role] || MENUS.guest
 
@@ -50,6 +56,7 @@ export default function Navbar() {
           <img src="/favicon.svg" alt="" width="28" height="28" />
           <span>Cảnh báo lũ Đà Nẵng</span>
         </Link>
+        {!onHome && <div className="navbar__theme"><ThemeToggle /></div>}
         {user && <NotificationBell />}
         <button className="navbar__toggle" aria-expanded={open} aria-controls="main-menu"
           onClick={() => setOpen((o) => !o)}>

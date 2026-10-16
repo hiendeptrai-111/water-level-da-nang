@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Giám sát hồ chứa – thiết kế mới</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#2E7FC1}a:hover{color:#10243A}
+@keyframes dcPulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(2.8);opacity:0}}
+@keyframes dcFlow{0%{background-position:0 0}100%{background-position:0 36px}}
+@keyframes dcTwinkle{0%,100%{opacity:.35}50%{opacity:1}}
+.pulse{animation:dcPulse 1.6s ease-out infinite}
+.spill{animation:dcFlow .8s linear infinite}
+.tt{transition:background-color .7s ease,color .7s ease,border-color .7s ease}
+.body-sky{transition:top 1.6s cubic-bezier(.3,.7,.2,1),opacity 1.2s ease}
+.fade{transition:opacity 1.2s ease}
+.twinkle{animation:dcTwinkle 2.4s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){.pulse,.spill,.twinkle{animation:none}.tt,.body-sky,.fade{transition:none}}
+</style>
+</helmet>
+<div class="tt" style="font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; color: {{T.text}}; background: {{T.bg}}; min-height: 100vh; box-sizing: border-box; padding: 20px 20px 40px">
+<div style="max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px">
+
+<header class="tt" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px; padding: 14px 18px; background: {{T.panel}}; border: 1px solid {{T.border}}; border-radius: 16px">
+<div style="display: flex; align-items: center; gap: 14px">
+<div aria-hidden="true" class="tt" style="width: 44px; height: 44px; border-radius: 12px; background: {{T.panel2}}; border: 1px solid {{T.border2}}; display: flex; align-items: center; justify-content: center">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="{{T.river}}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h4l5 15H9z"></path><path d="M2 14c1.5 1 3 1 4.5 0"></path><path d="M2 18c1.5 1 3 1 4.5 0s3-1 4.5 0"></path><path d="M18 20c1 .7 2 .7 4 0"></path></svg>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<div class="tt" style="font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: {{T.text3}}">Giám sát hồ chứa · TP Đà Nẵng</div>
+<h1 style="margin: 0; font-size: 22px; font-weight: 700; line-height: 1.2">Lưu vực Vu Gia – Thu Bồn</h1>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px">
+<span class="tt" style="display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px; background: {{T.panel2}}; border: 1px solid {{T.border2}}; font-weight: 600"><span style="width: 8px; height: 8px; border-radius: 50%; background: {{T.river}}; display: inline-block"></span>Số liệu 06:00 · 01/01/2026</span>
+<span class="tt" style="padding: 7px 12px; border-radius: 999px; background: {{T.panel2}}; border: 1px solid {{T.border2}}; color: {{T.text2}}">Ngoài mùa lũ</span>
+<span class="tt" style="padding: 7px 12px; border-radius: 999px; background: {{T.panel2}}; border: 1px solid {{T.border2}}; color: {{T.text2}}">{{summary}}</span>
+<div role="group" aria-label="Chế độ hiển thị" class="tt" style="display: flex; padding: 4px; gap: 4px; border-radius: 12px; background: {{T.panel2}}; border: 1px solid {{T.border2}}">
+<button type="button" onClick="{{toLight}}" aria-pressed="{{lightPressed}}" class="tt" style="min-height: 40px; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px; border-radius: 9px; border: 0; background: {{lightBg}}; color: {{lightFg}}; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>Sáng</button>
+<button type="button" onClick="{{toDark}}" aria-pressed="{{darkPressed}}" class="tt" style="min-height: 40px; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px; border-radius: 9px; border: 0; background: {{darkBg}}; color: {{darkFg}}; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"></path></svg>Tối</button>
+</div>
+</div>
+</header>
+
+<div style="display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start">
+
+<section aria-label="Bản đồ và danh sách hồ" style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+<div class="tt" style="background: {{T.panel}}; border: 1px solid {{T.border}}; border-radius: 16px; padding: 12px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 4px">
+<div class="tt" style="font-size: 13px; font-weight: 600; color: {{T.text2}}">Vị trí các đập</div>
+<div class="tt" style="font-size: 12px; color: {{T.text3}}">Bấm vào một đập để xem mặt cắt</div>
+</div>
+<div class="tt" style="position: relative; width: 100%; aspect-ratio: 4 / 3; border-radius: 12px; overflow: hidden; background: {{T.land}}">
+<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%">
+<polygon points="82,0 86,8 90,16 94,26 97,36 100,46 100,0" fill="{{T.sea}}"></polygon>
+<polyline points="82,0 86,8 90,16 94,26 97,36 100,46" fill="none" stroke="{{T.coast}}" stroke-width="1.5" vector-effect="non-scaling-stroke"></polyline>
+<polyline points="13,40 19.1,41 29.6,40 43.5,35.2 56.5,29.5 69.6,26.7 75.7,16.2 80,7.6" fill="none" stroke="{{T.riverGlow}}" stroke-opacity="0.45" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
+<polyline points="65.2,90.5 69.6,77.1 71.3,66.7 65.2,52.4 63.5,44.8 71.3,33.3 82.6,27.6 89.6,25.7" fill="none" stroke="{{T.riverGlow}}" stroke-opacity="0.45" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
+<polyline points="13,40 19.1,41 29.6,40 43.5,35.2 56.5,29.5 69.6,26.7 75.7,16.2 80,7.6" fill="none" stroke="{{T.river}}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
+<polyline points="69.6,26.7 78.3,26.7 89.6,25.7" fill="none" stroke="{{T.river}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
+<polyline points="21.7,25.7 27.6,33.3 29.4,40.2" fill="none" stroke="{{T.river}}" stroke-opacity="0.8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
+<polyline points="52.2,81 49.6,69.5 43.5,57.1 36.5,46.7 31.3,41" fill="none" stroke="{{T.river}}" stroke-opacity="0.8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
+<polyline points="65.2,90.5 69.6,77.1 71.3,66.7 65.2,52.4 63.5,44.8 71.3,33.3 82.6,27.6 89.6,25.7" fill="none" stroke="{{T.river}}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline>
+</svg>
+
+<div style="position: absolute; left: 94%; top: 7%; transform: translateX(-50%); font-size: 11px; font-style: italic; letter-spacing: 0.04em; color: {{T.seaLabel}}">Biển Đông</div>
+<div style="position: absolute; left: 80%; top: 7.6%; transform: translate(-100%, -50%); display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: {{T.city}}">Đà Nẵng<span style="display: inline-block; width: 7px; height: 7px; background: {{T.city}}; border-radius: 2px"></span></div>
+<div style="position: absolute; left: 89.6%; top: 25.7%; transform: translate(-100%, 8px); display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: {{T.city}}">Hội An<span style="display: inline-block; width: 7px; height: 7px; background: {{T.city}}; border-radius: 2px"></span></div>
+<div style="position: absolute; left: 52%; top: 20%; font-size: 11px; color: {{T.riverLabel}}; font-weight: 700; letter-spacing: 0.02em">VU GIA · {{qVuGia}} m³/s</div>
+<div style="position: absolute; left: 44%; top: 47%; font-size: 11px; color: {{T.riverLabel}}; font-weight: 700; letter-spacing: 0.02em">THU BỒN · {{qThuBon}} m³/s</div>
+
+<sc-for list="{{dams}}" as="d" hint-placeholder-count="4">
+<button type="button" onClick="{{d.pick}}" aria-label="{{d.aria}}" aria-pressed="{{d.selected}}" style="position: absolute; left: {{d.x}}%; top: {{d.y}}%; transform: translate(-50%, -50%); width: 44px; height: 44px; padding: 0; border: 0; background: transparent; cursor: pointer; font-family: inherit; color: inherit">
+<sc-if value="{{d.isAlert}}" hint-placeholder-val="{{false}}">
+<span class="pulse" style="position: absolute; left: 15px; top: 15px; width: 14px; height: 14px; border-radius: 50%; background: {{d.color}}"></span>
+</sc-if>
+<span style="position: absolute; left: 7px; top: 7px; width: 30px; height: 30px; border-radius: 50%; background: {{d.halo}}"></span>
+<span style="position: absolute; left: 14px; top: 14px; width: 16px; height: 16px; box-sizing: border-box; border-radius: 50%; background: {{d.color}}; border: 2px solid {{T.dotBorder}}; box-shadow: {{d.ring}}"></span>
+<span class="tt" style="position: absolute; top: 4px; {{d.labelSide}}: 42px; white-space: nowrap; display: flex; flex-direction: column; align-items: flex-start; padding: 5px 10px; border-radius: 10px; background: {{T.panel}}; border: {{d.labelBorder}}; text-align: left">
+<span style="font-size: 12px; font-weight: 700; color: {{T.text}}">{{d.name}}</span>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; color: {{T.text2}}">{{d.levelText}} m</span>
+</span>
+</button>
+</sc-for>
+
+<div style="position: absolute; left: 10px; bottom: 10px; font-size: 11px; color: {{T.text3}}">Sơ đồ minh hoạ · vị trí gần đúng</div>
+</div>
+</div>
+
+<div aria-label="Danh sách hồ" style="display: flex; flex-direction: column; gap: 8px">
+<sc-for list="{{dams}}" as="d" hint-placeholder-count="4">
+<button type="button" onClick="{{d.pick}}" aria-pressed="{{d.selected}}" class="tt" style="min-height: 64px; display: flex; align-items: center; gap: 14px; padding: 10px 14px; border-radius: 14px; background: {{d.rowBg}}; border: {{d.rowBorder}}; color: {{T.text}}; font-family: inherit; text-align: left; cursor: pointer">
+<span style="width: 12px; height: 12px; border-radius: 50%; background: {{d.color}}; flex: none"></span>
+<span style="display: flex; flex-direction: column; gap: 1px; flex: 1 1 auto; min-width: 0">
+<span style="font-size: 15px; font-weight: 700">{{d.name}}</span>
+<span style="font-size: 12px; color: {{T.text2}}">{{d.river}} · {{d.alertText}}</span>
+</span>
+<sc-if value="{{d.spilling}}" hint-placeholder-val="{{false}}">
+<span style="font-size: 11px; font-weight: 700; color: {{T.riverLabel}}; padding: 3px 8px; border-radius: 999px; border: 1px solid {{T.riverGlow}}; flex: none">Xả tràn</span>
+</sc-if>
+<span style="display: flex; flex-direction: column; align-items: flex-end; gap: 1px; flex: none">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 16px; font-weight: 600">{{d.levelText}} m</span>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; color: {{T.text2}}">{{d.deltaShort}} so với MNDBT</span>
+</span>
+</button>
+</sc-for>
+</div>
+</section>
+
+<section aria-label="Mặt cắt ngang đập đang chọn" class="tt" style="flex: 1.45 1 620px; min-width: 0; background: {{T.panel}}; border: 1px solid {{T.border}}; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 18px">
+
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div class="tt" style="font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: {{T.text3}}">Mặt cắt ngang đập</div>
+<h2 style="margin: 0; font-size: 30px; font-weight: 700; line-height: 1.15">{{sel.name}}</h2>
+<div class="tt" style="font-size: 14px; color: {{T.text2}}">{{sel.river}} · nhánh {{sel.basin}}</div>
+</div>
+<span style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; font-size: 14px; font-weight: 700; background: {{sel.color}}; color: {{sel.badgeText}}">{{sel.alertText}}</span>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+<div class="tt" style="background: {{T.panel2}}; border: 1px solid {{T.border2}}; border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px">
+<div style="font-size: 12px; color: {{T.text2}}">Mực nước hiện tại</div>
+<div style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 30px; font-weight: 600; line-height: 1.1">{{sel.levelText}}<span style="font-size: 15px; margin-left: 4px; color: {{T.text2}}">m</span></div>
+</div>
+<div class="tt" style="background: {{T.panel2}}; border: 1px solid {{T.border2}}; border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px">
+<div style="font-size: 12px; color: {{T.text2}}">So với MNDBT</div>
+<div style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 30px; font-weight: 600; line-height: 1.1">{{sel.deltaShort}}<span style="font-size: 15px; margin-left: 4px; color: {{T.text2}}">m</span></div>
+</div>
+<div class="tt" style="background: {{sel.spillBg}}; border: 1px solid {{sel.spillBorder}}; border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px">
+<div style="font-size: 12px; color: {{T.text2}}">Cửa tràn</div>
+<div style="font-size: 18px; font-weight: 700; line-height: 1.3">{{sel.spillText}}</div>
+<div style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px; color: {{T.text2}}">{{sel.qtranText}} m³/s</div>
+</div>
+</div>
+
+<div role="img" aria-label="{{sel.figAria}}" class="tt" style="position: relative; width: 100%; height: 460px; border-radius: 14px; overflow: hidden; background: {{T.sky}}; border: 1px solid {{T.border}}">
+
+<sc-for list="{{stars}}" as="st" hint-placeholder-count="10">
+<span class="fade" style="position: absolute; left: {{st.x}}%; top: {{st.y}}%; width: {{st.size}}px; height: {{st.size}}px; border-radius: 50%; background: #F4F7FB; opacity: {{st.o}}"></span>
+</sc-for>
+
+<div class="fade" style="position: absolute; left: 30%; top: 9%; width: 90px; height: 26px; border-radius: 999px; background: #FFFFFF; opacity: {{cloudOpacity}}"></div>
+<div class="fade" style="position: absolute; left: 33%; top: 5.5%; width: 44px; height: 32px; border-radius: 999px; background: #FFFFFF; opacity: {{cloudOpacity}}"></div>
+<div class="fade" style="position: absolute; left: 50%; top: 15%; width: 70px; height: 20px; border-radius: 999px; background: #FFFFFF; opacity: {{cloudOpacity}}"></div>
+<div class="fade" style="position: absolute; left: 52.5%; top: 12%; width: 32px; height: 24px; border-radius: 999px; background: #FFFFFF; opacity: {{cloudOpacity}}"></div>
+
+<div class="body-sky" aria-hidden="true" style="position: absolute; left: 82%; top: {{sunTop}}; width: 56px; height: 56px; margin-left: -28px; border-radius: 50%; background: #FFC94A; box-shadow: 0 0 0 10px rgba(255,201,74,0.28), 0 0 0 24px rgba(255,201,74,0.12); opacity: {{sunOpacity}}"></div>
+
+<div class="body-sky" aria-hidden="true" style="position: absolute; left: 18%; top: {{moonTop}}; width: 42px; height: 42px; margin-left: -21px; border-radius: 50%; background: #EEF2F7; box-shadow: 0 0 0 8px rgba(238,242,247,0.08), 0 0 24px 4px rgba(238,242,247,0.18); opacity: {{moonOpacity}}">
+<span style="position: absolute; left: 13px; top: -5px; width: 40px; height: 40px; border-radius: 50%; background: {{T.sky}}"></span>
+</div>
+
+<div class="tt" style="position: absolute; left: 0; right: 0; bottom: 0; height: 66%; background: {{T.hillFar}}; clip-path: polygon(0% 100%, 0% 52%, 10% 38%, 22% 50%, 36% 26%, 50% 44%, 63% 22%, 76% 40%, 88% 28%, 100% 42%, 100% 100%)"></div>
+<div class="tt" style="position: absolute; left: 0; right: 0; bottom: 0; height: 48%; background: {{T.hillNear}}; clip-path: polygon(0% 100%, 0% 46%, 14% 30%, 28% 50%, 44% 36%, 58% 56%, 72% 34%, 86% 52%, 100% 40%, 100% 100%)"></div>
+
+<sc-for list="{{sel.ticks}}" as="t" hint-placeholder-count="5">
+<div style="position: absolute; left: 7%; right: 0; bottom: {{t.pct}}%; border-top: 1px solid {{T.grid}}"></div>
+<div style="position: absolute; left: 8px; bottom: {{t.pct}}%; transform: translateY(50%); font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; font-weight: 600; color: {{T.tick}}; background: {{T.labelBg}}; padding: 0 4px; border-radius: 4px">{{t.label}}</div>
+</sc-for>
+
+<div class="tt" style="position: absolute; left: 7%; bottom: 0; width: 51%; height: {{sel.waterPct}}%; background: {{T.water}}"></div>
+<div class="tt" style="position: absolute; left: 7%; bottom: 0; width: 51%; height: {{sel.deepPct}}%; background: {{T.waterDeep}}"></div>
+<div class="tt" style="position: absolute; left: 7%; bottom: calc({{sel.waterPct}}% - 6px); width: 51%; height: 6px; background: {{T.waterTop}}"></div>
+
+<div class="tt" style="position: absolute; right: 0; bottom: 0; width: 23%; height: {{sel.downPct}}%; background: {{T.water}}; border-top: 4px solid {{T.waterTop}}"></div>
+
+<div class="tt" style="position: absolute; left: 0; right: 0; bottom: 0; height: 4%; background: {{T.bed}}"></div>
+
+<div class="tt" style="position: absolute; left: 55%; bottom: 0; width: 23%; height: {{damPct}}%; background: {{T.damFace}}; clip-path: polygon(10% 0%, 32% 0%, 100% 100%, 0% 100%)"></div>
+<div class="tt" style="position: absolute; left: 55%; bottom: 0; width: 23%; height: {{damPct}}%; background: {{T.damShade}}; clip-path: polygon(32% 0%, 100% 100%, 84% 100%, 32% 9%)"></div>
+<div class="tt" style="position: absolute; left: 56.8%; bottom: {{gateBottom}}%; width: 5.4%; height: 3.6%; background: {{T.gate}}; border-radius: 2px"></div>
+
+<sc-if value="{{sel.spilling}}" hint-placeholder-val="{{false}}">
+<div class="spill" style="position: absolute; left: 62.3%; bottom: 0; width: 15.9%; height: {{spillPct}}%; clip-path: polygon(0% 0%, 20% 0%, 100% 100%, 74% 100%); background-image: repeating-linear-gradient(180deg, #5DB0EC 0px, #5DB0EC 10px, #A9D7F8 10px, #A9D7F8 18px)"></div>
+</sc-if>
+
+<sc-for list="{{sel.lines}}" as="l" hint-placeholder-count="3">
+<sc-if value="{{l.isBand}}" hint-placeholder-val="{{false}}">
+<div style="position: absolute; left: 7%; width: 50%; bottom: {{l.bandBottom}}%; height: {{l.bandHeight}}%; background: {{T.band}}; border-top: 2px dashed {{T.lineTruoc}}; border-bottom: 2px dashed {{T.lineTruoc}}"></div>
+</sc-if>
+<sc-if value="{{l.isLine}}" hint-placeholder-val="{{true}}">
+<div style="position: absolute; left: 7%; width: 50%; bottom: {{l.pct}}%; border-top: {{l.border}}"></div>
+</sc-if>
+<div style="position: absolute; left: calc(7% + 8px); bottom: {{l.labelBottom}}; font-size: 11px; font-weight: 700; color: {{l.labelColor}}; background: {{T.labelBg}}; padding: 2px 7px; border-radius: 5px; white-space: nowrap">{{l.label}}</div>
+</sc-for>
+
+<div style="position: absolute; left: 34%; bottom: calc({{sel.waterPct}}% + 8px); display: inline-flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px; font-weight: 600; color: {{T.pillFg}}; background: {{T.pillBg}}; padding: 3px 9px; border-radius: 6px; white-space: nowrap">▽ {{sel.levelText}} m</div>
+
+<div style="position: absolute; left: calc(7% + 8px); top: 10px; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: {{T.tick}}; background: {{T.labelBg}}; padding: 1px 6px; border-radius: 4px">Lòng hồ</div>
+<div style="position: absolute; right: 12px; bottom: calc({{sel.downPct}}% + 8px); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: {{T.tick}}; background: {{T.labelBg}}; padding: 1px 6px; border-radius: 4px">Hạ lưu</div>
+<div style="position: absolute; right: 12px; bottom: 6px; font-size: 11px; color: {{T.tick}}; background: {{T.labelBg}}; padding: 1px 6px; border-radius: 4px">Đập vẽ minh hoạ</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: {{T.text2}}">
+<span style="display: inline-flex; align-items: center; gap: 6px"><span style="display: inline-block; width: 22px; border-top: 2px solid {{T.lineMain}}"></span>MNDBT</span>
+<span style="display: inline-flex; align-items: center; gap: 6px"><span style="display: inline-block; width: 22px; border-top: 2px dashed {{T.lineTruoc}}"></span>Cao nhất trước lũ</span>
+<span style="display: inline-flex; align-items: center; gap: 6px"><span style="display: inline-block; width: 22px; border-top: 2px dashed {{T.lineDon}}"></span>Đón lũ thấp nhất</span>
+</div>
+<div role="group" aria-label="Chọn thời kỳ ngưỡng" class="tt" style="display: flex; padding: 4px; gap: 4px; border-radius: 12px; background: {{T.panel2}}; border: 1px solid {{T.border2}}">
+<sc-for list="{{periods}}" as="p" hint-placeholder-count="3">
+<button type="button" onClick="{{p.pick}}" aria-pressed="{{p.selected}}" class="tt" style="min-height: 44px; padding: 0 14px; border-radius: 9px; border: 0; background: {{p.bg}}; color: {{p.fg}}; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">{{p.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="font-size: 12px; color: {{T.text3}}; margin-top: -8px">{{periodNote}}</div>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+<sc-for list="{{sel.flows}}" as="f" hint-placeholder-count="3">
+<div class="tt" style="background: {{T.panel2}}; border: 1px solid {{T.border2}}; border-radius: 12px; padding: 10px 14px; display: flex; flex-direction: column; gap: 2px">
+<div style="font-size: 12px; color: {{T.text2}}">{{f.label}}</div>
+<div style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 18px; font-weight: 600">{{f.value}} <span style="font-size: 12px; color: {{T.text2}}">m³/s</span></div>
+</div>
+</sc-for>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 13px; font-weight: 600; color: {{T.text2}}">Dự báo mực nước</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+<div style="border: 1px dashed {{T.dashed}}; border-radius: 12px; padding: 10px 14px"><div style="font-size: 12px; color: {{T.text2}}">Sau 1 giờ</div><div style="font-size: 14px; font-weight: 600">[từ mô hình]</div></div>
+<div style="border: 1px dashed {{T.dashed}}; border-radius: 12px; padding: 10px 14px"><div style="font-size: 12px; color: {{T.text2}}">Sau 3 giờ</div><div style="font-size: 14px; font-weight: 600">[từ mô hình]</div></div>
+<div style="border: 1px dashed {{T.dashed}}; border-radius: 12px; padding: 10px 14px"><div style="font-size: 12px; color: {{T.text2}}">Sau 6 giờ</div><div style="font-size: 14px; font-weight: 600">[từ mô hình]</div></div>
+</div>
+</div>
+
+<div class="tt" style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; border-top: 1px solid {{T.border}}; padding-top: 14px">
+<div style="font-size: 12px; color: {{T.text3}}; max-width: 420px">Ngưỡng vận hành theo Quyết định 1865/QĐ-TTg, không phải ngưỡng mất an toàn của đập. Kết quả dự báo mang tính tham khảo.</div>
+<a href="#" class="tt" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 10px; background: {{T.btnBg}}; color: {{T.btnFg}}; font-size: 14px; font-weight: 700; text-decoration: none">Xem chi tiết hồ</a>
+</div>
+</section>
+
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"av_alert":{"editor":"enum","options":["binh_thuong","theo_doi","canh_bao"],"default":"binh_thuong","section":"Minh hoạ mức cảnh báo"},"sb_alert":{"editor":"enum","options":["binh_thuong","theo_doi","canh_bao"],"default":"binh_thuong","section":"Minh hoạ mức cảnh báo"},"dm_alert":{"editor":"enum","options":["binh_thuong","theo_doi","canh_bao"],"default":"binh_thuong","section":"Minh hoạ mức cảnh báo"},"st_alert":{"editor":"enum","options":["binh_thuong","theo_doi","canh_bao"],"default":"binh_thuong","section":"Minh hoạ mức cảnh báo"},"$preview":{"width":1440,"height":1220}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    const h = new Date().getHours();
+    this.state = { sel: null, period: 'ngoai', theme: (h >= 6 && h < 18) ? 'light' : 'dark' };
+  }
+  renderVals() {
+    const THEMES = {
+      dark: {
+        bg: '#0A1622', panel: '#0F2133', panel2: '#13283D', border: '#1E3A55', border2: '#24425E',
+        text: '#E6EDF4', text2: '#9DB0C3', text3: '#7F95AB',
+        land: '#112538', sea: '#0A1826', coast: '#24425E', seaLabel: '#4F6E8C',
+        riverGlow: '#2A6EA6', river: '#5DB0EC', riverLabel: '#8CCBF7', city: '#B8C7D6', dotBorder: '#0A1622',
+        sky: '#0B1828', hillFar: '#10243A', hillNear: '#152E47', grid: 'rgba(120,160,200,0.14)', tick: '#9DB0C3', labelBg: 'rgba(10,22,34,0.82)',
+        water: '#1F669F', waterDeep: '#19568A', waterTop: '#66B6F2', bed: '#2A241D',
+        damFace: '#C3CBD3', damShade: '#A0ABB6', gate: '#4A5866',
+        pillBg: '#E6EDF4', pillFg: '#0A1622',
+        lineMain: '#E6EDF4', lineTruoc: '#F2B544', lineDon: '#7CC4F5', band: 'rgba(242,181,68,0.16)',
+        rowSel: '#16314B', rowSelBorder: '#8CCBF7', spillBg: '#123A5C', spillBorder: '#2A6EA6',
+        segOnBg: '#E6EDF4', segOnFg: '#0A1622', segOffFg: '#B8C7D6',
+        btnBg: '#E6EDF4', btnFg: '#0A1622', dashed: '#2E4E6D', selRing: '#E6EDF4'
+      },
+      light: {
+        bg: '#EEF2F6', panel: '#FFFFFF', panel2: '#F4F7FA', border: '#D8E0E8', border2: '#CBD6E0',
+        text: '#10243A', text2: '#3B5B78', text3: '#56687A',
+        land: '#E6EBE1', sea: '#CFE0EE', coast: '#A9C3D9', seaLabel: '#4D7598',
+        riverGlow: '#9CC6E8', river: '#2E7FC1', riverLabel: '#1E5A93', city: '#3B4A58', dotBorder: '#FFFFFF',
+        sky: '#CDE4F6', hillFar: '#B7CDB4', hillNear: '#9DBB98', grid: 'rgba(16,36,58,0.10)', tick: '#10243A', labelBg: 'rgba(255,255,255,0.88)',
+        water: '#2E7FC1', waterDeep: '#246BA6', waterTop: '#8FCBF5', bed: '#8A7B66',
+        damFace: '#C9D0D7', damShade: '#A3AEB9', gate: '#5B6672',
+        pillBg: '#10243A', pillFg: '#FFFFFF',
+        lineMain: '#10243A', lineTruoc: '#B4570F', lineDon: '#0B3B66', band: 'rgba(217,130,43,0.20)',
+        rowSel: '#E8F1FA', rowSelBorder: '#2E7FC1', spillBg: '#E4EFF9', spillBorder: '#9DC1E2',
+        segOnBg: '#10243A', segOnFg: '#FFFFFF', segOffFg: '#3B5B78',
+        btnBg: '#10243A', btnFg: '#FFFFFF', dashed: '#C8D1DA', selRing: '#10243A'
+      }
+    };
+    const isLight = this.state.theme === 'light';
+    const T = isLight ? THEMES.light : THEMES.dark;
+
+    const fmt = (n) => n.toFixed(2).replace('.', ',');
+    const signed = (n) => (n > 0 ? '+' : n < 0 ? '−' : '±') + fmt(Math.abs(n));
+    const ALERT = isLight ? {
+      binh_thuong: { rank: 0, text: 'Bình thường', color: '#2F7A6B', badgeText: '#FFFFFF', halo: 'rgba(47,122,107,0.22)' },
+      theo_doi: { rank: 1, text: 'Theo dõi', color: '#D9A21B', badgeText: '#2A1E00', halo: 'rgba(217,162,27,0.25)' },
+      canh_bao: { rank: 2, text: 'Cảnh báo', color: '#A8361B', badgeText: '#FFFFFF', halo: 'rgba(168,54,27,0.25)' }
+    } : {
+      binh_thuong: { rank: 0, text: 'Bình thường', color: '#3FB68B', badgeText: '#062016', halo: 'rgba(63,182,139,0.22)' },
+      theo_doi: { rank: 1, text: 'Theo dõi', color: '#F2B544', badgeText: '#2A1E00', halo: 'rgba(242,181,68,0.25)' },
+      canh_bao: { rank: 2, text: 'Cảnh báo', color: '#FF6B4A', badgeText: '#2A0A03', halo: 'rgba(255,107,74,0.28)' }
+    };
+    const DAMS = [
+      { id: 'av', name: 'A Vương', river: 'Sông A Vương', basin: 'Vu Gia', lng: 107.617, lat: 15.800, level: 379.85, qin: 28.00, qmay: 28.00, qtran: 0, mndbt: 380, p1: { truoc: [376], donlu: 370 }, p2: { truoc: [377, 380], donlu: 377 }, side: 'left' },
+      { id: 'sb', name: 'Sông Bung 4', river: 'Sông Bung', basin: 'Vu Gia', lng: 107.52, lat: 15.72, level: 222.45, qin: 43.50, qmay: 0, qtran: 0, mndbt: 222.5, p1: { truoc: [217.5], donlu: 216 }, p2: { truoc: [218.5, 222.5], donlu: 218.5 }, side: 'right' },
+      { id: 'dm', name: 'Đăk Mi 4', river: 'Sông Đăk Mi', basin: 'Vu Gia', lng: 107.87, lat: 15.42, level: 257.80, qin: 91.37, qmay: 105.73, qtran: 14.41, mndbt: 258, p1: { truoc: [255], donlu: 251.5 }, p2: { truoc: [256, 258], donlu: 256 }, side: 'left' },
+      { id: 'st', name: 'Sông Tranh 2', river: 'Sông Tranh', basin: 'Thu Bồn', lng: 108.10, lat: 15.34, level: 174.92, qin: 90.71, qmay: 28.05, qtran: 5.71, mndbt: 175, p1: { truoc: [172], donlu: 165 }, p2: { truoc: [173, 175], donlu: 173 }, side: 'left' }
+    ];
+    const keyOf = (id) => this.props[id + '_alert'] ?? 'binh_thuong';
+    const alertOf = (id) => ALERT[keyOf(id)] || ALERT.binh_thuong;
+
+    let selId = this.state.sel;
+    if (!selId) {
+      let best = DAMS[3];
+      DAMS.forEach((d) => { if (alertOf(d.id).rank > alertOf(best.id).rank) best = d; });
+      selId = best.id;
+    }
+
+    const dams = DAMS.map((d) => {
+      const a = alertOf(d.id);
+      const on = selId === d.id;
+      return {
+        name: d.name, river: d.river,
+        x: ((d.lng - 107.3) / 1.15 * 100).toFixed(1),
+        y: ((16.15 - d.lat) / 1.05 * 100).toFixed(1),
+        color: a.color, halo: a.halo, alertText: a.text,
+        isAlert: keyOf(d.id) === 'canh_bao',
+        spilling: d.qtran > 0,
+        levelText: fmt(d.level),
+        deltaShort: signed(d.level - d.mndbt),
+        labelSide: d.side,
+        selected: on ? 'true' : 'false',
+        ring: on ? '0 0 0 3px ' + T.selRing : 'none',
+        labelBorder: on ? '1px solid ' + T.selRing : '1px solid ' + T.border2,
+        rowBg: on ? T.rowSel : T.panel,
+        rowBorder: on ? '1px solid ' + T.rowSelBorder : '1px solid ' + T.border,
+        aria: d.name + ', mực nước ' + fmt(d.level) + ' mét, ' + a.text + '. Bấm để xem mặt cắt.',
+        pick: () => this.setState({ sel: d.id })
+      };
+    });
+
+    const counts = { canh_bao: 0, theo_doi: 0 };
+    DAMS.forEach((d) => { const k = keyOf(d.id); if (counts[k] !== undefined) counts[k] += 1; });
+    const summary = '4 hồ · ' + counts.canh_bao + ' cảnh báo · ' + counts.theo_doi + ' theo dõi';
+
+    const SCALE = 0.72;
+    const d = DAMS.find((x) => x.id === selId) || DAMS[3];
+    const a = alertOf(d.id);
+    const min = d.p1.donlu - 6;
+    const max = d.mndbt + 2;
+    const pct = (v) => Math.max(0, Math.min(100, (v - min) / (max - min) * 100)) * SCALE;
+    const s = (v) => v.toFixed(2);
+
+    const lines = [];
+    const addLine = (value, label, border, color, pos) => {
+      const p = pct(value);
+      lines.push({ isLine: true, isBand: false, pct: s(p), border: border, label: label, labelColor: color,
+        labelBottom: pos === 'above' ? 'calc(' + s(p) + '% + 5px)' : 'calc(' + s(p) + '% - 24px)' });
+    };
+    const period = this.state.period;
+    if (period === 'p1') {
+      addLine(d.p1.truoc[0], 'Cao nhất trước lũ ' + fmt(d.p1.truoc[0]), '2px dashed ' + T.lineTruoc, T.lineTruoc, 'above');
+      addLine(d.p1.donlu, 'Đón lũ thấp nhất ' + fmt(d.p1.donlu), '2px dashed ' + T.lineDon, T.lineDon, 'below');
+    }
+    if (period === 'p2') {
+      const lo = d.p2.truoc[0], hi = d.p2.truoc[1];
+      const bp = pct(lo), tp = pct(hi);
+      lines.push({ isLine: false, isBand: true, bandBottom: s(bp), bandHeight: s(tp - bp), label: 'Cao nhất trước lũ ' + fmt(lo) + '–' + fmt(hi), labelColor: T.lineTruoc,
+        labelBottom: 'calc(' + s((bp + tp) / 2) + '% - 9px)' });
+      addLine(d.p2.donlu, 'Đón lũ thấp nhất ' + fmt(d.p2.donlu), '2px dashed ' + T.lineDon, T.lineDon, 'below');
+    }
+    addLine(d.mndbt, 'MNDBT ' + fmt(d.mndbt), '2px solid ' + T.lineMain, T.lineMain, 'above');
+
+    const ticks = [];
+    const step = Math.max(1, Math.round((max - min) / 5));
+    for (let v = Math.ceil(min); v <= max; v += step) ticks.push({ pct: s(pct(v)), label: String(v) });
+
+    const waterP = pct(d.level);
+    const spilling = d.qtran > 0;
+    const delta = d.level - d.mndbt;
+    const sel = {
+      name: d.name, river: d.river, basin: d.basin,
+      color: a.color, badgeText: a.badgeText, alertText: a.text,
+      levelText: fmt(d.level), deltaShort: signed(delta),
+      waterPct: s(waterP), deepPct: s(waterP * 0.55),
+      downPct: spilling ? '12' : '8',
+      spilling: spilling,
+      spillText: spilling ? 'Đang xả qua tràn' : 'Tràn đóng',
+      qtranText: fmt(d.qtran),
+      spillBg: spilling ? T.spillBg : T.panel2,
+      spillBorder: spilling ? T.spillBorder : T.border2,
+      ticks: ticks, lines: lines,
+      figAria: 'Mặt cắt ngang đập ' + d.name + ': mực nước ' + fmt(d.level) + ' m, ' + (delta <= 0 ? 'thấp hơn' : 'cao hơn') + ' MNDBT ' + fmt(Math.abs(delta)) + ' m' + (spilling ? ', đang xả qua tràn.' : ', tràn đóng.'),
+      flows: [
+        { label: 'Lưu lượng đến', value: fmt(d.qin) },
+        { label: 'Qua máy', value: fmt(d.qmay) },
+        { label: 'Qua tràn', value: fmt(d.qtran) }
+      ]
+    };
+
+    const damPct = s(100 * SCALE + 2);
+    const PERIODS = [
+      { id: 'ngoai', label: 'Ngoài mùa lũ' },
+      { id: 'p1', label: '01/9 – 15/11' },
+      { id: 'p2', label: '16/11 – 15/12' }
+    ];
+    const periods = PERIODS.map((p) => {
+      const on = p.id === period;
+      return { label: p.label, selected: on ? 'true' : 'false',
+        bg: on ? T.segOnBg : 'transparent', fg: on ? T.segOnFg : T.segOffFg,
+        pick: () => this.setState({ period: p.id }) };
+    });
+    const periodNote = period === 'ngoai'
+      ? 'Ngày 01/01 nằm ngoài mùa lũ (01/9 – 15/12) nên chỉ áp dụng MNDBT. Chọn thời kỳ khác để xem ngưỡng mùa lũ.'
+      : 'Ngưỡng theo Điều 6, Quyết định 1865/QĐ-TTg cho thời kỳ đã chọn.';
+
+    const STARS = [[12, 8, 2], [20, 18, 3], [28, 6, 2], [40, 14, 2], [47, 5, 3], [58, 11, 2], [66, 20, 2], [74, 7, 3], [90, 16, 2], [95, 6, 2], [36, 24, 2], [62, 26, 2]];
+    const stars = STARS.map((p) => ({ x: p[0], y: p[1], size: p[2], o: isLight ? '0' : '0.9' }));
+
+    return {
+      T: T, dams: dams, sel: sel, periods: periods, periodNote: periodNote, summary: summary,
+      qVuGia: '148,14', qThuBon: '139,49',
+      damPct: damPct, gateBottom: s(100 * SCALE), spillPct: s(100 * SCALE),
+      stars: stars,
+      starOpacity: isLight ? '0' : '0.9',
+      cloudOpacity: isLight ? '0.92' : '0',
+      sunTop: isLight ? '7%' : '78%', sunOpacity: isLight ? '1' : '0',
+      moonTop: isLight ? '78%' : '8%', moonOpacity: isLight ? '0' : '1',
+      lightPressed: isLight ? 'true' : 'false', darkPressed: isLight ? 'false' : 'true',
+      lightBg: isLight ? T.segOnBg : 'transparent', lightFg: isLight ? T.segOnFg : T.segOffFg,
+      darkBg: isLight ? 'transparent' : T.segOnBg, darkFg: isLight ? T.segOffFg : T.segOnFg,
+      toLight: () => this.setState({ theme: 'light' }),
+      toDark: () => this.setState({ theme: 'dark' })
+    };
+  }
+}
+</script>
+</body>
+</html>

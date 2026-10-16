@@ -17,6 +17,18 @@ class Ward(models.Model):
     # Lower = shown first in the select box (downstream communes from Appendix B first).
     priority = models.PositiveSmallIntegerField("thứ tự ưu tiên", default=100)
 
+    class Confidence(models.TextChoices):
+        BOUNDARY = "boundary", "Tâm ranh giới mới (OSM)"
+        NEEDS_CHECK = "needs_check", "Điểm cùng tên – cần kiểm tra"
+        MISSING = "missing", "Chưa có tọa độ"
+        MANUAL = "manual", "Admin nhập"
+
+    coord_confidence = models.CharField("độ tin cậy tọa độ", max_length=12,
+                                        choices=Confidence.choices, default=Confidence.MISSING)
+    coord_source = models.CharField("nguồn tọa độ", max_length=255, blank=True)
+    coord_note = models.CharField("ghi chú tọa độ", max_length=255, blank=True)
+    osm_id = models.CharField("mã OSM", max_length=20, blank=True)
+
     class Meta:
         verbose_name = "phường/xã"
         verbose_name_plural = "phường/xã"

@@ -111,9 +111,10 @@ def _open_alert(reservoir, simulation):
 
 def _new_alert(reservoir, level, content, t, forecast, simulation):
     valid = timedelta(hours=get_config("auto_alert_valid_hours"))
-    alert = Alert.objects.create(level=level, source=Alert.Source.AUTO, content=content,
-                                 starts_at=t, valid_until=t + valid, forecast=forecast,
-                                 is_simulation=simulation, last_notified_at=t)
+    alert = Alert(level=level, source=Alert.Source.AUTO, content=content, starts_at=t,
+                  forecast=forecast, is_simulation=simulation, last_notified_at=t)
+    alert.record_validity(t, t + valid)
+    alert.save()
     alert.reservoirs.add(reservoir)
     alert.wards.set([link.ward_id for link in reservoir.ward_links.all()])
     return alert
@@ -162,7 +163,7 @@ def evaluate(reservoir, issued_at, result, forecast_rows, *, simulation=False, s
         if current is None:               # state kept but alert missing (e.g. deleted replay)
             content = compose(reservoir, local, result, level, simulation=simulation)
             current = _new_alert(reservoir, level, content, t, forecast, simulation)
-        current.valid_until = t + valid
+        current.record_validity(t, t + valid)
         current.forecast = forecast
         reminder_every = timedelta(hours=get_config("warning_reminder_hours"))
         if (level == AlertLevel.WARNING and current.last_notified_at is not None
@@ -173,7 +174,7 @@ def evaluate(reservoir, issued_at, result, forecast_rows, *, simulation=False, s
                        send_email=send_email and not simulation)
             current.last_notified_at = t
             outcome = "nhắc lại"
-        current.save(update_fields=["valid_until", "forecast", "last_notified_at"])
+        current.save(update_fields=["valid_until", "validity_history", "forecast", "last_notified_at"])
 
     state.level = level
     state.evaluated_at = t

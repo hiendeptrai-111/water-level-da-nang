@@ -55,6 +55,9 @@ class AuditLog(models.Model):
         THRESHOLD_CHANGED = "threshold_changed", "Sửa ngưỡng quy định"
         DIRECTIVE_CREATED = "directive_created", "Thêm chỉ đạo điều hành"
         DIRECTIVE_DEACTIVATED = "directive_deactivated", "Đánh dấu chỉ đạo hết hiệu lực"
+        WARD_COORDS_CHANGED = "ward_coords_changed", "Sửa tọa độ phường/xã"
+        RESERVOIR_WARD_CHANGED = "reservoir_ward_changed", "Sửa liên kết hồ – phường/xã"
+        RESERVOIR_COORDS_CHANGED = "reservoir_coords_changed", "Sửa tọa độ đập"
 
     created_at = models.DateTimeField("thời điểm", auto_now_add=True, db_index=True)
     actor = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="người thực hiện",

@@ -1,0 +1,97 @@
+# Tọa độ trung tâm 94 đơn vị. Nguồn: OpenStreetMap (© OpenStreetMap contributors, ODbL), lấy ngày 09/10/2026
+# confidence: boundary = tâm ranh giới mới (admin_level=6) khớp tên; needs_check = chỉ có điểm cùng tên, cần kiểm tra; missing = không tìm được (để trống)
+kind,name,latitude,longitude,source,confidence,osm_id,note
+commune,Avương,15.975092,107.563323,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337555",boundary,R19337555,trọng tâm diện tích của ranh giới
+commune,Bà Nà,16.036772,108.046419,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 15848508",boundary,R15848508,trọng tâm diện tích của ranh giới
+commune,Bến Giằng,15.663955,107.709803,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337552",boundary,R19337552,trọng tâm diện tích của ranh giới
+commune,Bến Hiên,15.840825,107.716063,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337551",boundary,R19337551,trọng tâm diện tích của ranh giới
+commune,Chiên Đàn,15.554961,108.422686,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337550",boundary,R19337550,trọng tâm diện tích của ranh giới
+commune,Đắc Pring,15.505361,107.601689,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337549",boundary,R19337549,trọng tâm diện tích của ranh giới
+commune,Đại Lộc,15.89909,108.103224,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337548",boundary,R19337548,trọng tâm diện tích của ranh giới
+commune,Điện Bàn Tây,15.886435,108.177366,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337544",boundary,R19337544,trọng tâm diện tích của ranh giới
+commune,Đồng Dương,15.643979,108.283867,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337543",boundary,R19337543,trọng tâm diện tích của ranh giới
+commune,Đông Giang,15.931608,107.659945,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337542",boundary,R19337542,trọng tâm diện tích của ranh giới
+commune,Đức Phú,15.439662,108.503651,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337541",boundary,R19337541,trọng tâm diện tích của ranh giới
+commune,Duy Nghĩa,15.839538,108.367551,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337540",boundary,R19337540,trọng tâm diện tích của ranh giới
+commune,Duy Xuyên,15.781852,108.202422,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337539",boundary,R19337539,trọng tâm diện tích của ranh giới
+commune,Gò Nổi,15.853272,108.206785,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337538",boundary,R19337538,trọng tâm diện tích của ranh giới
+commune,Hà Nha,15.863329,107.991423,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337537",boundary,R19337537,trọng tâm diện tích của ranh giới
+commune,Hiệp Đức,15.571177,108.06695,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337536",boundary,R19337536,trọng tâm diện tích của ranh giới
+commune,Hòa Tiến,15.954566,108.109601,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 15848502",boundary,R15848502,trọng tâm diện tích của ranh giới
+commune,Hòa Vang,15.97288,108.039395,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 15848504",boundary,R15848504,trọng tâm diện tích của ranh giới
+commune,Hùng Sơn,15.802562,107.312982,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337532",boundary,R19337532,trọng tâm diện tích của ranh giới
+commune,Khâm Đức,15.512398,107.776565,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337530",boundary,R19337530,trọng tâm diện tích của ranh giới
+commune,La Dêê,15.554165,107.445966,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337529",boundary,R19337529,trọng tâm diện tích của ranh giới
+commune,La Êê,15.668238,107.350935,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337528",boundary,R19337528,trọng tâm diện tích của ranh giới
+commune,Lãnh Ngọc,15.441627,108.203409,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337527",boundary,R19337527,trọng tâm diện tích của ranh giới
+commune,Nam Giang,15.676852,107.503319,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337526",boundary,R19337526,trọng tâm diện tích của ranh giới
+commune,Nam Phước,15.844954,108.296239,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337525",boundary,R19337525,trọng tâm diện tích của ranh giới
+commune,Nam Trà My,15.127613,108.143325,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337524",boundary,R19337524,trọng tâm diện tích của ranh giới
+commune,Nông Sơn,15.707603,108.092225,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337523",boundary,R19337523,trọng tâm diện tích của ranh giới
+commune,Núi Thành,15.426916,108.658151,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337522",boundary,R19337522,trọng tâm diện tích của ranh giới
+commune,Phú Ninh,15.470034,108.426828,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337521",boundary,R19337521,trọng tâm diện tích của ranh giới
+commune,Phú Thuận,15.784125,108.004073,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337520",boundary,R19337520,trọng tâm diện tích của ranh giới
+commune,Phước Chánh,15.323465,107.802009,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337519",boundary,R19337519,trọng tâm diện tích của ranh giới
+commune,Phước Hiệp,15.467143,107.920535,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337518",boundary,R19337518,trọng tâm diện tích của ranh giới
+commune,Phước Năng,15.379239,107.731856,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337517",boundary,R19337517,trọng tâm diện tích của ranh giới
+commune,Phước Thành,15.302045,107.880962,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337516",boundary,R19337516,trọng tâm diện tích của ranh giới
+commune,Phước Trà,15.47668,108.058568,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337515",boundary,R19337515,trọng tâm diện tích của ranh giới
+commune,Quế Phước,15.648402,107.95491,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337513",boundary,R19337513,trọng tâm diện tích của ranh giới
+commune,Quế Sơn,15.661435,108.189464,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337512",boundary,R19337512,trọng tâm diện tích của ranh giới
+commune,Quế Sơn Trung,15.721236,108.261111,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337511",boundary,R19337511,trọng tâm diện tích của ranh giới
+commune,Sơn Cẩm Hà,15.541188,108.263922,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337510",boundary,R19337510,trọng tâm diện tích của ranh giới
+commune,Sông Kôn,15.975075,107.783215,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337509",boundary,R19337509,trọng tâm diện tích của ranh giới
+commune,Sông Vàng,15.992576,107.907836,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337508",boundary,R19337508,trọng tâm diện tích của ranh giới
+commune,Tam Anh,15.490671,108.580527,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337507",boundary,R19337507,trọng tâm diện tích của ranh giới
+commune,Tam Hải,15.48819,108.657232,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337506",boundary,R19337506,trọng tâm diện tích của ranh giới
+commune,Tam Mỹ,15.369012,108.546917,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337504",boundary,R19337504,trọng tâm diện tích của ranh giới
+commune,Tam Xuân,15.534774,108.537985,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337503",boundary,R19337503,trọng tâm diện tích của ranh giới
+commune,Tân Hiệp,15.948209,108.516445,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337502",boundary,R19337502,trọng tâm diện tích của ranh giới
+commune,Tây Giang,15.851531,107.483791,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337501",boundary,R19337501,trọng tâm diện tích của ranh giới
+commune,Tây Hồ,15.588359,108.383442,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337500",boundary,R19337500,trọng tâm diện tích của ranh giới
+commune,Thăng An,15.778976,108.394903,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337499",boundary,R19337499,trọng tâm diện tích của ranh giới
+commune,Thăng Bình,15.722628,108.353833,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337498",boundary,R19337498,trọng tâm diện tích của ranh giới
+commune,Thăng Điền,15.667519,108.412393,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337497",boundary,R19337497,trọng tâm diện tích của ranh giới
+commune,Thăng Phú,15.632517,108.348149,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337496",boundary,R19337496,trọng tâm diện tích của ranh giới
+commune,Thăng Trường,15.681055,108.462061,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337495",boundary,R19337495,trọng tâm diện tích của ranh giới
+commune,Thạnh Bình,15.438768,108.322996,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337494",boundary,R19337494,trọng tâm diện tích của ranh giới
+commune,Thạnh Mỹ,15.758947,107.783359,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337493",boundary,R19337493,trọng tâm diện tích của ranh giới
+commune,Thu Bồn,15.792584,108.112369,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337492",boundary,R19337492,trọng tâm diện tích của ranh giới
+commune,Thượng Đức,15.846289,107.890388,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337491",boundary,R19337491,trọng tâm diện tích của ranh giới
+commune,Tiên Phước,15.50429,108.344731,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337490",boundary,R19337490,trọng tâm diện tích của ranh giới
+commune,Trà Đốc,15.353245,108.068127,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337489",boundary,R19337489,trọng tâm diện tích của ranh giới
+commune,Trà Giáp,15.196428,108.257734,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337488",boundary,R19337488,trọng tâm diện tích của ranh giới
+commune,Trà Leng,15.239911,108.009369,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337487",boundary,R19337487,trọng tâm diện tích của ranh giới
+commune,Trà Liên,15.347616,108.369906,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337486",boundary,R19337486,trọng tâm diện tích của ranh giới
+commune,Trà Linh,15.015878,108.055603,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337485",boundary,R19337485,trọng tâm diện tích của ranh giới
+commune,Trà My,15.349141,108.234562,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337484",boundary,R19337484,trọng tâm diện tích của ranh giới
+commune,Trà Tân,15.263629,108.184891,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337483",boundary,R19337483,trọng tâm diện tích của ranh giới
+commune,Trà Tập,15.131278,108.059745,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337482",boundary,R19337482,trọng tâm diện tích của ranh giới
+commune,Trà Vân,15.088994,108.209963,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337481",boundary,R19337481,trọng tâm diện tích của ranh giới
+commune,Việt An,15.572855,108.17244,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337480",boundary,R19337480,trọng tâm diện tích của ranh giới
+commune,Vu Gia,15.852155,108.069015,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337479",boundary,R19337479,trọng tâm diện tích của ranh giới
+commune,Xuân Phú,15.790376,108.302175,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337478",boundary,R19337478,trọng tâm diện tích của ranh giới
+special_zone,Hoàng Sa,,,,missing,,không tìm được trên OpenStreetMap
+ward,An Hải,16.068884,108.236786,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 13996723",boundary,R13996723,trọng tâm diện tích của ranh giới
+ward,An Khê,16.036897,108.179381,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 13981042",boundary,R13981042,trọng tâm diện tích của ranh giới
+ward,An Thắng,15.909606,108.225614,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337554",boundary,R19337554,trọng tâm diện tích của ranh giới
+ward,Bàn Thạch,15.585247,108.467209,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337553",boundary,R19337553,"trọng tâm nằm ngoài ranh giới, dùng điểm label của relation"
+ward,Cẩm Lệ,16.010331,108.187865,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 13967823",boundary,R13967823,trọng tâm diện tích của ranh giới
+ward,Điện Bàn,15.87925,108.267328,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337547",boundary,R19337547,trọng tâm diện tích của ranh giới
+ward,Điện Bàn Bắc,15.930276,108.182845,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337546",boundary,R19337546,trọng tâm diện tích của ranh giới
+ward,Điện Bàn Đông,15.930695,108.274254,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337545",boundary,R19337545,trọng tâm diện tích của ranh giới
+ward,Hải Châu,16.077737,108.218041,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 13969677",boundary,R13969677,trọng tâm diện tích của ranh giới
+ward,Hải Vân,16.132531,107.978602,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 14651843",boundary,R14651843,trọng tâm diện tích của ranh giới
+ward,Hòa Cường,16.042249,108.210815,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 13967817",boundary,R13967817,trọng tâm diện tích của ranh giới
+ward,Hòa Khánh,16.052322,108.128478,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 14651840",boundary,R14651840,trọng tâm diện tích của ranh giới
+ward,Hòa Xuân,15.986604,108.210159,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 13967826",boundary,R13967826,trọng tâm diện tích của ranh giới
+ward,Hội An,15.869657,108.330025,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337535",boundary,R19337535,trọng tâm diện tích của ranh giới
+ward,Hội An Đông,15.881945,108.361936,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337534",boundary,R19337534,trọng tâm diện tích của ranh giới
+ward,Hội An Tây,15.896537,108.31936,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337533",boundary,R19337533,trọng tâm diện tích của ranh giới
+ward,Hương Trà,15.544278,108.49432,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337531",boundary,R19337531,trọng tâm diện tích của ranh giới
+ward,Liên Chiểu,16.087196,108.093661,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 15848509",boundary,R15848509,trọng tâm diện tích của ranh giới
+ward,Ngũ Hành Sơn,15.997551,108.250041,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 13967842",boundary,R13967842,trọng tâm diện tích của ranh giới
+ward,Quảng Phú,15.595603,108.515253,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337514",boundary,R19337514,trọng tâm diện tích của ranh giới
+ward,Sơn Trà,16.119717,108.267436,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 13996982",boundary,R13996982,trọng tâm diện tích của ranh giới
+ward,Tam Kỳ,15.558066,108.478662,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 19337505",boundary,R19337505,trọng tâm diện tích của ranh giới
+ward,Thanh Khê,16.068199,108.191455,"OpenStreetMap (© OpenStreetMap contributors, ODbL), relation 13995327",boundary,R13995327,trọng tâm diện tích của ranh giới

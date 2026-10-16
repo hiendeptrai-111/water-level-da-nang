@@ -14,6 +14,8 @@ class PublicAlertSerializer(serializers.ModelSerializer):
     reservoirs = serializers.SerializerMethodField()
     wards = serializers.SerializerMethodField()
     in_my_ward = serializers.SerializerMethodField()
+    valid_until = serializers.SerializerMethodField()
+    ended_at = serializers.SerializerMethodField()
 
     class Meta:
         model = Alert
@@ -23,6 +25,15 @@ class PublicAlertSerializer(serializers.ModelSerializer):
 
     def get_reservoirs(self, obj):
         return _reservoirs(obj)
+
+    def get_valid_until(self, obj):
+        """At a replay time (context "at"), the validity the alert had then."""
+        value = obj.valid_until_at(self.context.get("at"))
+        return serializers.DateTimeField().to_representation(value) if value else None
+
+    def get_ended_at(self, obj):
+        value = obj.ended_at_view(self.context.get("at"))
+        return serializers.DateTimeField().to_representation(value) if value else None
 
     def get_wards(self, obj):
         return [{"id": w.id, "label": str(w)} for w in obj.wards.all()]

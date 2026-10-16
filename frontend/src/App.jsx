@@ -21,6 +21,8 @@ import VerifyEmailPage from './pages/VerifyEmailPage'
 
 // Charts (recharts) are only loaded when a reservoir page is opened: the home page stays light.
 const ReservoirDetailPage = lazy(() => import('./pages/ReservoirDetailPage'))
+const WeatherPage = lazy(() => import('./pages/WeatherPage'))
+const WeatherMapPage = lazy(() => import('./pages/WeatherMapPage'))
 
 export default function App() {
   return (
@@ -29,6 +31,8 @@ export default function App() {
         <Route index element={<HomePage />} />
         <Route path="reservoirs/:code" element={<Suspense fallback={<Spinner />}><ReservoirDetailPage /></Suspense>} />
         <Route path="alerts" element={<AlertsPage />} />
+        <Route path="weather" element={<Suspense fallback={<Spinner />}><WeatherPage /></Suspense>} />
+        <Route path="weather/map" element={<Suspense fallback={<Spinner />}><WeatherMapPage /></Suspense>} />
         <Route path="verify-email" element={<VerifyEmailPage />} />
         <Route path="forgot-password" element={<ForgotPasswordPage />} />
         <Route path="reset-password" element={<ResetPasswordPage />} />

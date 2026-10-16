@@ -1,0 +1,6 @@
+# Tọa độ đập. Nguồn: OpenStreetMap (© OpenStreetMap contributors, ODbL) (Overpass), hoặc tọa độ gần đúng cần xác minh
+code,name,latitude,longitude,source,needs_verification
+av,A Vương,15.799664,107.617328,"OpenStreetMap (© OpenStreetMap contributors, ODbL), way 479648364 «Đập Thuỷ điện A Vương»",0
+dm,Đăk Mi 4,15.453265,107.832142,"OpenStreetMap (© OpenStreetMap contributors, ODbL), way 439942289 «Đập thủy điện Đăk Mi 4»",0
+sb,Sông Bung 4,15.697997,107.639435,"OpenStreetMap (© OpenStreetMap contributors, ODbL), way 479647796 «Đập thủy điện Sông Bung 4»",0
+st,Sông Tranh 2,15.34,108.1,Tọa độ gần đúng do chủ dự án cung cấp (không có đối tượng đập cùng tên trên OSM) – cần xác minh,1

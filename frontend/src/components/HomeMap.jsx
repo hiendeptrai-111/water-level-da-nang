@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
-import { CircleMarker, MapContainer, TileLayer, useMap, useMapEvents } from 'react-leaflet'
+import { CircleMarker, MapContainer, useMap, useMapEvents } from 'react-leaflet'
+import BaseTileLayer from './BaseTileLayer'
 import 'leaflet/dist/leaflet.css'
 
 const DEFAULT_CENTER = [15.75, 108.1] // Da Nang (new boundaries)
@@ -22,10 +23,7 @@ function FlyTo({ position }) {
 export default function HomeMap({ position, flyTarget, onPick }) {
   return (
     <MapContainer center={position || DEFAULT_CENTER} zoom={position ? 15 : DEFAULT_ZOOM} scrollWheelZoom={false}>
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+      <BaseTileLayer />
       <ClickToPin onPick={onPick} />
       <FlyTo position={flyTarget} />
       {position && (
