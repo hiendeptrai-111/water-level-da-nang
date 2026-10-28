@@ -35,5 +35,15 @@ DEFAULTS = {
     "rain_archive_lag_days": (5, "ngày", 1,
                               "Mưa Open-Meteo Historical lấy đến (hôm nay − số ngày này); "
                               "phần gần hơn lấy từ Forecast API"),
-    "dispatch_refresh_seconds": (30, "giây", 5, "Chu kỳ tự tải lại màn hình điều phối (giai đoạn 4)"),
+    "dispatch_refresh_seconds": (30, "giây", 5, "Chu kỳ tự tải lại màn hình điều phối và trang nhiệm vụ"),
+    "flood_point_radius_m": (50, "m", 1, "Bán kính ảnh hưởng của một điểm ngập lên các đoạn đường"),
+    "flood_slowdown_factor": (Decimal("3"), "lần", Decimal("1"),
+                              "Điểm ngập \"xe máy không qua được\": thời gian đi qua đoạn đường nhân hệ số này"),
+    "flood_point_ttl_hours": (12, "giờ", 1, "Điểm ngập tự hết hạn sau số giờ này nếu không ai xác nhận lại"),
+    "boat_speed_kmh": (20, "km/h", 1, "Tốc độ ca nô (tính theo đường thẳng, giả định đơn giản)"),
+    "sos_rate_limit_per_hour": (10, "lần/giờ", 1, "Số lần gửi SOS tối đa mỗi giờ theo thiết bị và theo địa chỉ IP"),
+    "sos_photo_max_kb": (2048, "KB", 50, "Dung lượng tối đa của ảnh đính kèm SOS và điểm ngập (sau khi trình duyệt nén)"),
+    "team_location_max_age_minutes": (30, "phút", 1,
+                                      "Vị trí đội cũ hơn số phút này thì tính đường từ căn cứ của đội"),
+    "claim_notify_teams": (3, "đội", 1, "Số đội rảnh gần nhất được báo khi SOS quá thời gian chờ chưa phân công"),
 }

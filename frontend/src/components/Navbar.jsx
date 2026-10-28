@@ -8,31 +8,34 @@ import ThemeToggle from '../theme/ThemeToggle'
 // Menu items by role. Pages of later phases are added when they exist.
 const MENUS = {
   guest: [
+    { to: '/sos', label: 'SOS' },
     { to: '/', label: 'Trang chủ', end: true },
     { to: '/alerts', label: 'Cảnh báo' },
     { to: '/weather', label: 'Thời tiết' },
   ],
   citizen: [
+    { to: '/sos', label: 'SOS' },
+    { to: '/sos/track', label: 'SOS của tôi' },
     { to: '/', label: 'Trang chủ', end: true },
     { to: '/alerts', label: 'Cảnh báo' },
     { to: '/weather', label: 'Thời tiết' },
-    { to: '/account', label: 'Tài khoản' },
   ],
   rescue_team: [
     { to: '/rescue/tasks', label: 'Nhiệm vụ' },
+    { to: '/flood-points', label: 'Điểm ngập' },
     { to: '/', label: 'Trang chủ', end: true },
     { to: '/alerts', label: 'Cảnh báo' },
     { to: '/weather', label: 'Thời tiết' },
-    { to: '/account', label: 'Tài khoản' },
   ],
   admin: [
     { to: '/admin', label: 'Bảng điều khiển', end: true },
+    { to: '/admin/sos', label: 'Điều phối SOS' },
+    { to: '/admin/flood-points', label: 'Điểm ngập' },
     { to: '/admin/alerts', label: 'Lịch sử cảnh báo' },
     { to: '/admin/thresholds', label: 'Ngưỡng' },
     { to: '/admin/users', label: 'Người dùng' },
     { to: '/', label: 'Trang chủ', end: true },
     { to: '/weather', label: 'Thời tiết' },
-    { to: '/account', label: 'Tài khoản' },
   ],
 }
 
@@ -69,10 +72,11 @@ export default function Navbar() {
           ))}
           {user ? (
             <div className="navbar__user">
-              <span className="navbar__who">
-                {user.full_name}
+              <NavLink to="/account" className="navbar__who" title="Tài khoản">
+                <span className="navbar__name">{user.full_name}</span>
                 <span className={`role-badge role-badge--${user.role}`}>{ROLE_LABELS[user.role]}</span>
-              </span>
+                <span className="sr-only">– Tài khoản</span>
+              </NavLink>
               <button className="btn btn--ghost btn--sm" onClick={onLogout}>Đăng xuất</button>
             </div>
           ) : (

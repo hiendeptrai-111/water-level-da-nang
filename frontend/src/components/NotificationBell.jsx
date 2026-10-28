@@ -49,7 +49,7 @@ export default function NotificationBell() {
               {data.results.map((x) => (
                 <li key={x.id} className={x.seen_at ? 'is-seen' : ''}>
                   <div className="row">
-                    <LevelBadge level={x.alert_level} />
+                    {x.sos_code ? <span className="tag tag--sos">SOS {x.sos_code}</span> : <LevelBadge level={x.alert_level} />}
                     {x.is_simulation && <span className="tag tag--sim">Mô phỏng</span>}
                     <span className="small muted">{dateTime(x.created_at)}</span>
                   </div>

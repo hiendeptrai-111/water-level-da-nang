@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "reservoirs",
     "alerts",
     "weather",
+    "rescue",
 ]
 
 MIDDLEWARE = [
@@ -150,6 +151,11 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", "Canh bao lu Da Nang <no-reply@lo
 
 # Used to build links in emails (verify email, reset password).
 FRONTEND_URL = env("FRONTEND_URL", "http://localhost:5173").rstrip("/")
+
+# Uploaded photos (SOS, flood points). Served only through permission-checked views,
+# never as public static files.
+MEDIA_ROOT = Path(env("MEDIA_ROOT", str(BASE_DIR / "media")))
+DATA_UPLOAD_MAX_MEMORY_SIZE = 6 * 1024 * 1024
 
 # Forecast modules copied from the research folder (du_bao/, never edited).
 FORECAST_DIR = Path(env("FORECAST_DIR", str(PROJECT_DIR / "du_bao")))

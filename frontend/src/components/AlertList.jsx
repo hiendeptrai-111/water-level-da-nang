@@ -5,7 +5,7 @@ import LevelBadge from './LevelBadge'
 export function EmergencyNumbers() {
   return (
     <p className="emergency-numbers">
-      Khẩn cấp gọi: <a href="tel:112">112</a> cứu nạn, cứu hộ · <a href="tel:114">114</a> cứu hỏa · <a href="tel:115">115</a> cấp cứu
+      Khẩn cấp gọi: <a href="tel:112">112</a> tìm kiếm cứu nạn · <a href="tel:114">114</a> cứu hoả, cứu nạn cứu hộ · <a href="tel:115">115</a> cấp cứu
     </p>
   )
 }

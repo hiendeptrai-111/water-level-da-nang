@@ -2,11 +2,13 @@
 
 Website theo tài liệu đặc tả `docs/dac_ta_chuc_nang.md`, làm theo 5 giai đoạn (mục 8 của đặc tả).
 
-**Trạng thái: đã xong Giai đoạn 1, 2 và 3.**
+**Trạng thái: đã xong Giai đoạn 1, 2, 3 và 4.**
 
 - Giai đoạn 1: CN01–CN05 (tài khoản), CN23 (quản lý người dùng), CN28 (nhật ký hệ thống).
 - Giai đoạn 2: CN06–CN10 (hồ chứa, dự báo, cảnh báo tự động), CN12 (lịch sử cảnh báo), CN24 (ngưỡng và chỉ đạo), CN27 (tình trạng dữ liệu và mô hình).
 - Giai đoạn 3: CN13 (thời tiết theo phường/xã), CN14 (bản đồ mưa), CN25 (tọa độ và liên kết hồ – phường/xã).
+- Giao diện: đã làm lại toàn bộ theo thiết kế đã chốt `docs/thiet_ke_trang_chu.html`, gồm chế độ Sáng/Tối, trang chủ có bản đồ đập và mặt cắt ngang đập (xem mục "Giao diện" ở phần 2).
+- Giai đoạn 4: CN15–CN21 (SOS, theo dõi SOS, điều phối, gợi ý đội theo đường đi thực tế, nhiệm vụ đội cứu hộ, điểm ngập), CN26 (quản lý đội cứu hộ). Giai đoạn 5 chưa làm.
 
 ```
 water-level-da-nang/
@@ -18,6 +20,7 @@ water-level-da-nang/
 │   ├── reservoirs/  Hồ chứa, số liệu vận hành, mưa, dự báo, ngưỡng, chỉ đạo, quy trình mỗi giờ
 │   ├── alerts/      Cảnh báo, thông báo, cảnh báo tự động (CN10)
 │   ├── weather/     Thời tiết phường/xã (bảng lưu đệm Open-Meteo), API thời tiết và bản đồ mưa
+│   ├── rescue/      SOS, lịch sử SOS, điểm ngập, điều phối, tính đường đi (OSMnx + NetworkX)
 │   └── data/
 │       ├── wards.csv                 94 đơn vị theo Nghị quyết 1659/NQ-UBTVQH15 (có ghi nguồn)
 │       ├── ward_centroids.csv        tọa độ trung tâm, nguồn và độ tin cậy (OpenStreetMap, ODbL)
@@ -89,18 +92,29 @@ Vite chuyển tiếp các request `/api` sang `http://localhost:8000`, nên ph�
 
 ## 3. Tài khoản demo
 
-`python manage.py seed_demo_data` tạo (mật khẩu chung: `Demo12345`, **chỉ để thử**). Lệnh từ chối chạy khi `DJANGO_DEBUG=false`.
+`python manage.py seed_demo_data` tạo các tài khoản dưới đây. Mật khẩu chỉ để thử trên máy phát triển; lệnh từ chối chạy khi `DJANGO_DEBUG=false`.
 
-| Vai trò | Email | Số điện thoại | Ghi chú |
-|---|---|---|---|
-| Admin | admin@demo.example.com | 0900000001 | |
-| Đội cứu hộ | doi1@demo.example.com | 0900000011 | Đội Đại Lộc: xe cứu hộ, xe máy |
-| Đội cứu hộ | doi2@demo.example.com | 0900000012 | Đội Hội An: ca nô, xe máy |
-| Người dân | dan1@demo.example.com | 0900000021 | Xã Đại Lộc |
-| Người dân | dan2@demo.example.com | 0900000022 | Xã Duy Xuyên |
-| Người dân | dan3@demo.example.com | 0900000023 | Phường Hội An |
+| Vai trò | Email | Số điện thoại | Mật khẩu | Ghi chú |
+|---|---|---|---|---|
+| Admin | admin@demo.example.com | 0900000001 | `Demo12345` | |
+| Đội cứu hộ | doi1@demo.example.com | 0900000011 | `Demo12345` | Đội Đại Lộc: xe cứu hộ, xe máy |
+| Đội cứu hộ | doi2@demo.example.com | 0900000012 | `Demo12345` | Đội Hội An: ca nô, xe máy |
+| Người dân | dan1@demo.example.com | 0900000021 | `Demo12345` | Xã Đại Lộc |
+| Người dân | dan2@demo.example.com | 0900000022 | `Demo12345` | Xã Duy Xuyên |
+| Người dân | dan3@demo.example.com | 0900000023 | `Demo12345` | Phường Hội An |
 
 Đăng nhập bằng email **hoặc** số điện thoại. Sau khi đăng nhập: người dân về `/`, đội cứu hộ về `/rescue/tasks`, admin về `/admin`.
+
+Tài khoản bạn tự đăng ký hoặc tạo bằng `createsuperuser` không có trong bảng này. Mật khẩu chỉ lưu dạng băm nên không xem lại được; quên thì dùng "Quên mật khẩu", hoặc nhờ admin đặt lại ở trang Người dùng.
+
+### Thử nhanh theo vai trò
+
+- **Chưa đăng nhập:** vào `/sos`, nhập số điện thoại bất kỳ dạng `09xxxxxxxx`, nhấn giữ nút đỏ 3 giây. Ghi lại mã SOS để xem ở `/sos/track` (nhập mã cùng số điện thoại đã gửi).
+- **Người dân** (`dan1@demo.example.com`): gửi SOS không cần nhập số điện thoại; xem ở menu "SOS của tôi"; báo điểm ngập ở `/flood-points/report` (cần admin duyệt).
+- **Admin** (`admin@demo.example.com`): vào "Điều phối SOS" (`/admin/sos`), chọn một SOS, bấm "Tiếp nhận", "Gợi ý đội", rồi "Phân công". Duyệt điểm ngập ở `/admin/flood-points`.
+- **Đội cứu hộ** (`doi1@demo.example.com`): ở `/rescue/tasks` thấy nhiệm vụ được giao. SOS chờ quá 15 phút chưa được phân công sẽ hiện ở mục "SOS chờ nhận"; số điện thoại chỉ hiện sau khi bấm "Nhận".
+
+**SOS demo:** 3 SOS mô phỏng, số điện thoại `0900000101`, `0900000102`, `0900000103`. Mã SOS được tạo ngẫu nhiên mỗi lần chạy `seed_demo_data`; xem mã ở trang Điều phối SOS (đăng nhập admin). Dùng mã cùng số điện thoại tương ứng để xem ở `/sos/track`.
 
 ## 4. Dữ liệu và dự báo (giai đoạn 2)
 
@@ -244,6 +258,122 @@ Lệnh `update_forecasts` (cùng một dòng cron) chạy bước thời tiết 
 - **Phường/xã:** sửa vĩ độ và kinh độ. Tọa độ phải nằm trong Đà Nẵng, được đánh dấu `manual`, và mỗi lần sửa ghi AuditLog. Liên kết hồ – phường/xã (loại vùng, cần xác minh) sửa ngay trên trang của phường/xã.
 - **Liên kết hồ – phường/xã:** sửa loại vùng và cờ "cần xác minh" ngay trong danh sách; mọi thay đổi đều ghi AuditLog.
 
+## 4c. SOS và điều phối cứu hộ (giai đoạn 4)
+
+### Cài đặt mạng đường (một lần)
+
+```bash
+brew install osmium-tool                         # macOS; Linux: apt install osmium-tool
+# Tải bản trích xuất OpenStreetMap Việt Nam (~330 MB) vào kho_du_lieu/osm/:
+curl -L -o kho_du_lieu/osm/vietnam-latest.osm.pbf https://download.geofabrik.de/asia/vietnam-latest.osm.pbf
+cd backend && python manage.py fetch_road_network     # dựng đồ thị, lưu kho_du_lieu/roads/drive_appendix_b.graphml
+```
+
+**Vì sao dùng file Geofabrik mà không dùng Overpass:** Overpass công khai (overpass-api.de) từ chối các truy vấn lớn tải mạng đường. Thông báo của họ ghi rõ endpoint này dành cho công cụ do người thao tác; dùng tự động hoặc khối lượng lớn thì phải chạy máy chủ riêng. Vì vậy mạng đường được dựng từ bản trích xuất OpenStreetMap của Geofabrik (cùng dữ liệu OSM, giấy phép ODbL):
+
+1. osmium cắt vùng bao 32 phường/xã Phụ lục B và căn cứ các đội, nới thêm khoảng 2 km.
+2. Chỉ giữ các loại đường cho xe; bỏ đường `access=private/no`, `motor_vehicle=no`, `motorcar=no`.
+3. OSMnx dựng đồ thị và cắt đúng theo vùng.
+
+Kết quả (file `vietnam-261015.osm.pbf`, ngày 15/10/2026): **25.354 nút, 62.721 cạnh, GraphML 36,3 MB**, dựng trong 80 giây. Lệnh chạy lại thì dùng GraphML đã có (`--refresh` để dựng lại).
+
+### Tính thời gian tiếp cận (CN18)
+
+Đường đi tính bằng **OSMnx + NetworkX** (Dijkstra trên đồ thị có trọng số), không dùng OSRM như đặc tả ghi. Lý do: cần chặn hoặc làm chậm tức thì các đoạn đường ngập.
+
+- **Trọng số cạnh** = chiều dài / tốc độ theo loại đường. Tốc độ dưới đây là **giả định của đề tài**, không phải số đo, nằm trong `rescue/routing.py`:
+
+  | Loại đường (OSM `highway`) | km/h |
+  |---|---|
+  | motorway / trunk / primary / secondary / tertiary | 80 / 60 / 50 / 40 / 35 |
+  | *_link (theo thứ tự trên) | 40 / 35 / 30 / 25 / 20 |
+  | unclassified / residential / road / living_street | 25 / 20 / 20 / 10 |
+  | loại khác | 20 |
+
+  Từ vị trí chính xác của SOS hoặc của đội tới nút đường gần nhất: tính theo đường thẳng, 15 km/h.
+- **Điểm ngập ĐÃ DUYỆT, còn hạn** ảnh hưởng mọi cạnh có đoạn thẳng nằm trong bán kính `flood_point_radius_m` (50 m):
+  - "Xe máy không qua được": thời gian nhân `flood_slowdown_factor` (3).
+  - "Ô tô không qua được" và "Chỉ ca nô": xoá cạnh với đội đi đường bộ.
+  - Đồ thị không bị sao chép: điểm ngập được áp vào hàm trọng số của Dijkstra.
+- **Đội có ca nô:** thời gian = khoảng cách đường thẳng / `boat_speed_kmh` (20 km/h). Đây là giả định đơn giản (xem phần Giới hạn). Đội có cả ca nô và xe được tính theo phương án nhanh hơn.
+- **Không còn đường:** ghi "Không tiếp cận được bằng đường bộ".
+- **Vị trí của đội:** vị trí đội gửi lên khi mở trang Nhiệm vụ, nếu mới hơn `team_location_max_age_minutes` (30 phút); nếu không thì dùng căn cứ của đội.
+- **Hiệu năng:** chỉ một lần Dijkstra từ SOS trên đồ thị đảo chiều cho mọi đội. Với 1 SOS và 5 đội trên đồ thị Phụ lục B, thời gian thực tế là **0,13–0,22 giây**. Nạp đồ thị mất 3,8 giây, một lần cho mỗi tiến trình.
+- **Chỉ gợi ý 3 đội tốt nhất**, kèm thời gian và tuyến đường; admin tự bấm "Phân công". Lỗi tính đường không ảnh hưởng việc gửi SOS hay phân công: phân công vẫn được, chỉ không có tuyến.
+
+### Điểm ưu tiên SOS (giả định của đề tài, `rescue/services.py`)
+
+```
+điểm = mức nước (ngang gối 10, ngang ngực 30, ngập tầng 1 45, phải lên mái 70)
+     + nhóm cần ưu tiên (10 điểm mỗi nhóm, tối đa 30)
+     + số người (2–4: 5, từ 5: 10)
+     + thời gian chờ (1 điểm mỗi 3 phút, tối đa 20)
+     + mức cảnh báo đang có ở phường/xã (Theo dõi 5, Cảnh báo 15, Khẩn cấp 25)
+Mức: ≥ 60 Rất cao · 40–59 Cao · 20–39 Trung bình · < 20 Thấp
+```
+
+Điểm được tính lại khi SOS thay đổi, khi mở danh sách điều phối, và mỗi phút (`check_sos_claims`).
+
+### Luồng SOS
+
+- **Trạng thái:** Mới gửi → Đã tiếp nhận → Đang di chuyển → Đã cứu → Đóng. Ngoài ra có Huỷ (người gửi huỷ khi đã an toàn) và Không liên lạc được (đội báo).
+- **Lịch sử:** mọi lần đổi trạng thái đều thêm một dòng `SOSHistory`; thống kê thời gian xử lý lấy từ bảng này. "Đã đến nơi" và "Trả lại nhiệm vụ" cũng được ghi vào lịch sử.
+- **Gửi SOS (`/sos`):**
+  - Không cần đăng nhập; chưa đăng nhập thì bắt buộc số điện thoại.
+  - Gửi vị trí và số điện thoại trước; số người, nhóm ưu tiên, mức nước, ghi chú và ảnh gửi bổ sung sau.
+  - Mỗi tài khoản hoặc số điện thoại chỉ có 1 SOS đang mở; gửi tiếp thì cập nhật SOS cũ.
+  - Giới hạn `sos_rate_limit_per_hour` (10) lần mỗi giờ, đếm riêng theo thiết bị và theo IP.
+  - Ảnh: 1 ảnh, nén phía trình duyệt; server kiểm tra dung lượng (`sos_photo_max_kb`) và loại tệp thật (JPEG/PNG/WebP).
+- **Khoá thao tác:** "Tiếp nhận" (admin) và "Nhận" (đội) khoá dòng SOS trong database, nên 2 admin hoặc 2 đội không xử lý trùng. Đội chỉ nhận thêm khi đang Rảnh.
+- **Đội tự nhận:** chỉ thấy SOS chờ quá `sos_self_claim_wait_minutes` (15 phút) mà chưa được phân công. Trước khi nhận, đội chỉ thấy vị trí, mức ưu tiên và thời gian chờ; số điện thoại chỉ hiện sau khi nhận.
+- **Lệnh chạy mỗi phút `check_sos_claims`:**
+  - báo các đội rảnh gần nhất (`claim_notify_teams`, 3 đội) qua Notification website và email, mỗi SOS một lần;
+  - cập nhật điểm ưu tiên;
+  - cho điểm ngập hết hạn.
+- **Ẩn danh hoá:** lệnh chạy mỗi ngày `anonymize_sos` xử lý các SOS đã Đóng hoặc Huỷ quá `sos_anonymize_days` (90) ngày:
+  - xoá số điện thoại, ảnh, ghi chú, người gửi, mã thiết bị, IP, tuyến đường;
+  - đổi tọa độ thành tâm phường/xã;
+  - giữ thời điểm, phường/xã, trạng thái, lịch sử, số người, nhóm, mức nước để thống kê.
+
+Lệnh không tự bật cron. Dòng cron mẫu (`--print-cron`):
+
+```
+* * * * *  cd /đường/dẫn/backend && .venv/bin/python manage.py check_sos_claims >> logs/check_sos_claims.log 2>&1
+30 2 * * * cd /đường/dẫn/backend && .venv/bin/python manage.py anonymize_sos >> logs/anonymize_sos.log 2>&1
+```
+
+### Điểm ngập (CN20, CN21)
+
+- Người dân báo thì ở trạng thái Chờ duyệt; đội cứu hộ và admin báo thì dùng ngay.
+- Điểm ngập tự hết hạn sau `flood_point_ttl_hours` (12 giờ). Đội hoặc admin có thể xác nhận lại để gia hạn.
+- Admin duyệt, từ chối, sửa mức, gộp điểm gần nhau (trong vòng 300 m).
+- Bản đồ công khai `/flood-points` chỉ hiện điểm đã duyệt, không kèm người báo.
+
+### Quản lý đội cứu hộ (CN26)
+
+Trang quản trị Django → Đội cứu hộ: tên, căn cứ (vĩ độ, kinh độ), số thành viên, số điện thoại, phương tiện, các phường/xã thường phụ trách, trạng thái.
+
+### Tham số mới trong SystemConfig
+
+| Khoá | Mặc định | Ý nghĩa |
+|---|---|---|
+| `flood_point_radius_m` | 50 m | Bán kính ảnh hưởng của điểm ngập |
+| `flood_slowdown_factor` | 3 lần | Hệ số làm chậm khi "xe máy không qua được" |
+| `flood_point_ttl_hours` | 12 giờ | Thời hạn điểm ngập |
+| `boat_speed_kmh` | 20 km/h | Tốc độ ca nô (đường thẳng) |
+| `sos_rate_limit_per_hour` | 10 lần/giờ | Giới hạn gửi SOS theo thiết bị và theo IP |
+| `sos_photo_max_kb` | 2048 KB | Dung lượng ảnh tối đa |
+| `team_location_max_age_minutes` | 30 phút | Vị trí đội cũ hơn thì tính từ căn cứ |
+| `claim_notify_teams` | 3 đội | Số đội được báo khi SOS chờ quá lâu |
+| `sos_self_claim_wait_minutes`, `sos_anonymize_days`, `dispatch_refresh_seconds` | 15 phút, 90 ngày, 30 giây | (đã có từ giai đoạn 1) |
+
+### Giới hạn đã biết
+
+- Tốc độ theo loại đường và tốc độ ca nô là giả định, chưa hiệu chỉnh bằng số liệu thực tế.
+- Ca nô được tính theo đường thẳng, không xét lòng sông.
+- Mạng đường lấy từ bản trích xuất OSM tại một thời điểm; muốn cập nhật thì tải file mới và chạy `fetch_road_network --refresh`.
+- Điểm ngập ảnh hưởng theo đoạn thẳng giữa hai nút của cạnh, không theo hình dạng cong chi tiết của con đường.
+
 ## 5. Chạy test
 
 User `water` cần quyền tạo database tạm `test_water_level`. Cấp quyền một lần:
@@ -260,6 +390,10 @@ python manage.py test
 ```
 
 Nếu không muốn cấp quyền, chạy test bằng một user đã có sẵn quyền đó. Ví dụ với Postgres.app: `DB_USER=$(whoami) python manage.py test`.
+
+Frontend: `cd frontend && npm test`.
+
+Test giai đoạn 4 dùng một đồ thị đường nhỏ dựng sẵn (không cần file mạng đường).
 
 Test của giai đoạn 2 không cần `kho_du_lieu/`: test tạo một kho dữ liệu tổng hợp trong thư mục tạm rồi nạp bằng chính các lệnh trên. Nếu máy có `kho_du_lieu/`, test (b) chạy thêm một lần trên dữ liệu thật tháng 10/2025.
 
@@ -326,6 +460,25 @@ Khi xem mô phỏng tại thời điểm `at`, các trường "hiệu lực đ�
 | `GET /api/weather/boundaries/` | Công khai | GeoJSON ranh giới phường/xã (OpenStreetMap, ODbL) |
 | `PATCH /api/admin/wards/{id}/` | Admin | Sửa tọa độ trung tâm `{latitude, longitude}`: kiểm tra nằm trong Đà Nẵng, ghi AuditLog (CN25) |
 
+### Giai đoạn 4
+
+| Phương thức, đường dẫn | Quyền | Chức năng |
+|---|---|---|
+| `POST /api/sos/` | Công khai (chưa đăng nhập phải có `phone`), giới hạn tần suất | Gửi SOS (vị trí + số điện thoại); SOS đang mở thì cập nhật |
+| `GET/PATCH /api/sos/{code}/` | Người gửi (tài khoản, hoặc mã + `phone`) | Theo dõi; bổ sung thông tin, cập nhật vị trí |
+| `POST /api/sos/{code}/cancel/`, `POST /api/sos/{code}/photo/` | Người gửi | Huỷ khi đã an toàn; gửi 1 ảnh |
+| `GET /api/sos/mine/` | Người dân | SOS của mình |
+| `GET /api/dispatch/sos/?status=&ward=` | Admin | Danh sách SOS (sắp theo ưu tiên), đội, điểm ngập đã duyệt (CN17) |
+| `GET /api/dispatch/sos/{id}/`, `.../photo/` | Admin | Chi tiết, lịch sử, ảnh |
+| `GET /api/dispatch/sos/{id}/suggestions/` | Admin | 3 đội tốt nhất, thời gian, tuyến (CN18) |
+| `POST /api/dispatch/sos/{id}/receive|assign|merge|close/` | Admin | Tiếp nhận (có khoá), phân công `{team}`, gộp `{into: mã}`, đóng |
+| `GET /api/rescue/tasks/` | Đội cứu hộ | Nhiệm vụ được giao, SOS chờ nhận (không có số điện thoại) (CN19) |
+| `POST /api/rescue/tasks/{id}/claim|arrived|rescued|unreachable|return/` | Đội cứu hộ | Nhận (có khoá), cập nhật, trả lại `{note}` |
+| `POST /api/rescue/location/`, `POST /api/rescue/status/` | Đội cứu hộ | Gửi vị trí đội; đặt trạng thái Rảnh / Đang làm nhiệm vụ / Nghỉ |
+| `GET /api/flood-points/` | Công khai | Điểm ngập đã duyệt, không kèm người báo |
+| `POST /api/flood-points/`, `POST /api/flood-points/{id}/confirm/` | Đã đăng nhập; xác nhận lại: đội/admin | Báo điểm ngập (CN20); gia hạn |
+| `GET /api/admin/flood-points/`, `POST .../{id}/approve|reject|level|merge/` | Admin | Duyệt điểm ngập (CN21) |
+
 ## 7. Bảng đối chiếu tên
 
 Code dùng tên tiếng Anh; giao diện hoàn toàn bằng tiếng Việt. Cột 1 là tên hoặc mã trong `docs/dac_ta_chuc_nang.md` (hoặc tên mô tả trong yêu cầu), cột 2 là tên trong code.
@@ -346,7 +499,14 @@ Code dùng tên tiếng Anh; giao diện hoàn toàn bằng tiếng Việt. Cộ
 | CN09 Cảnh báo khu vực, `/canh-bao` | `GET /api/alerts/`, màn hình `/alerts` |
 | CN10 Cảnh báo tự động | `alerts.services.evaluate`; `/api/notifications/`; chuông thông báo (`NotificationBell`) |
 | CN12 Lịch sử cảnh báo, `/admin/canh-bao` | `/api/admin/alerts/`, màn hình `/admin/alerts` |
-| CN19 Nhiệm vụ cứu hộ, `/cuu-ho/nhiem-vu` | màn hình `/rescue/tasks` (giữ chỗ, giai đoạn 4) |
+| CN15 Gửi SOS, `/sos` | `POST /api/sos/`, màn hình `/sos` (`SOSPage`, nút `HoldButton`) |
+| CN16 Theo dõi SOS của tôi, `/sos/cua-toi` | `/api/sos/mine/`, `/api/sos/{code}/`; màn hình `/sos/track` |
+| CN17 Bản đồ và danh sách SOS, `/admin/sos` | `/api/dispatch/sos/`; màn hình `/admin/sos` (`DispatchPage`, bản đồ `OpsMap`) |
+| CN18 Gợi ý và phân công đội | `/api/dispatch/sos/{id}/suggestions/`, `.../assign/`; `rescue/routing.py` (OSMnx + NetworkX, thay OSRM) |
+| CN19 Nhiệm vụ và tự nhận SOS, `/cuu-ho/nhiem-vu` | `/api/rescue/tasks/`; màn hình `/rescue/tasks` |
+| CN20 Báo điểm ngập, `/diem-ngap/bao-cao` | `POST /api/flood-points/`; màn hình `/flood-points/report`; bản đồ công khai `/flood-points` |
+| CN21 Duyệt điểm ngập, `/admin/diem-ngap` | `/api/admin/flood-points/`; màn hình `/admin/flood-points` |
+| CN26 Quản lý đội cứu hộ, `/admin/doi-cuu-ho` | Django admin `catalog.RescueTeam` |
 | CN23 Quản lý người dùng, `/admin/nguoi-dung` | `/api/admin/users/`, màn hình `/admin/users` |
 | CN13 Thời tiết theo phường/xã, `/thoi-tiet` | `GET /api/weather/wards/{id}/`, màn hình `/weather` (`?ward=`); ô thời tiết trên trang chủ (`WeatherTile`) |
 | CN14 Bản đồ mưa, `/thoi-tiet/ban-do` | `GET /api/weather/map/`, `/api/weather/boundaries/`; màn hình `/weather/map` |
@@ -364,7 +524,11 @@ Code dùng tên tiếng Anh; giao diện hoàn toàn bằng tiếng Việt. Cộ
 | Đặc tả | Code |
 |---|---|
 | PhuongXa | `catalog.Ward` |
-| DoiCuuHo | `catalog.RescueTeam` |
+| DoiCuuHo: so_thanh_vien, can_cu, trang_thai (ranh/dang_lam/nghi), vi_tri_hien_tai, khu_vuc_phu_trach | `catalog.RescueTeam`: member_count, base_name, base_latitude/base_longitude, status (`available`/`busy`/`off`), current_latitude/current_longitude, location_updated_at, service_wards |
+| SOS: ma, nguoi_gui, so_dien_thoai, vi_do, kinh_do, do_chinh_xac, phuong_xa, so_nguoi, nhom_uu_tien, muc_nuoc, ghi_chu, anh, diem_uu_tien, trang_thai, doi, gop_vao, gui_luc, an_danh_luc | `rescue.SOS`: code, sender, phone, latitude, longitude, accuracy_m, ward, people_count, vulnerable_groups, water_level, note, photo, priority_score, status, team, merged_into, created_at, anonymized_at |
+| trang_thai SOS: moi_gui / da_tiep_nhan / dang_di_chuyen / da_cuu / dong / huy / khong_lien_lac_duoc | `new` / `received` / `moving` / `rescued` / `closed` / `cancelled` / `unreachable` |
+| LichSuSOS: tu_trang_thai, sang_trang_thai, nguoi_thuc_hien, ghi_chu, thoi_diem | `rescue.SOSHistory`: from_status, to_status, actor, note, time |
+| DiemNgap: muc (di_lai_duoc/xe_may_khong_qua/o_to_khong_qua/chi_ca_no), anh, nguoi_bao, trang_thai (cho_duyet/da_duyet/tu_choi/het_han), nguoi_duyet, het_han_luc | `rescue.FloodPoint`: level (`passable`/`no_motorbike`/`no_car`/`boat_only`), photo, reporter, status (`pending`/`approved`/`rejected`/`expired`), approved_by, expires_at |
 | NguoiDung | `accounts.User` |
 | CauHinh | `core.SystemConfig` |
 | NhatKy | `core.AuditLog` |
@@ -402,6 +566,9 @@ Code dùng tên tiếng Anh; giao diện hoàn toàn bằng tiếng Việt. Cộ
 | cap_nhat_du_bao | `update_forecasts` (gồm cả bước thời tiết) |
 | lấy tọa độ phường/xã từ OpenStreetMap | `fetch_ward_centroids` |
 | lấy tọa độ đập từ OpenStreetMap | `fetch_dam_coordinates` |
+| dựng mạng đường (OSMnx) | `fetch_road_network` |
+| kiểm tra mốc 15 phút (chạy mỗi phút) | `check_sos_claims` |
+| ẩn danh hoá SOS (chạy mỗi ngày) | `anonymize_sos` |
 | nạp tọa độ phường/xã | `load_ward_centroids` |
 | cập nhật thời tiết | `update_weather` |
 | CauHinh ngưỡng "Mưa lớn" | `SystemConfig` `heavy_rain_threshold_mm` |
@@ -418,4 +585,5 @@ Code dùng tên tiếng Anh; giao diện hoàn toàn bằng tiếng Việt. Cộ
 - Nhật ký hệ thống chỉ được thêm, được bảo vệ ở bốn lớp: API không có thao tác sửa/xoá, trang Django admin chỉ cho xem, model chặn `save()`/`delete()`, và một trigger PostgreSQL chặn mọi lệnh UPDATE/DELETE.
 - Chỉ đạo điều hành không xoá được: API không có sửa/xoá, model chặn `delete()`. Sửa ngưỡng, thêm chỉ đạo và đánh dấu chỉ đạo hết hiệu lực đều được ghi nhật ký.
 - Mọi tham số (thời gian khoá, hạn link, thời hạn JWT, ngưỡng dữ liệu cũ, ...) nằm trong bảng SystemConfig; admin sửa được, không viết cứng trong code.
-- `seed_demo_data` từ chối chạy khi `DJANGO_DEBUG=false`.
+- `seed_demo_data` từ chối chạy khi `DJANGO_DEBUG=false`. Lệnh tạo thêm căn cứ cho 2 đội, 4 điểm ngập và 3 SOS mô phỏng ở các xã hạ du, tất cả đánh dấu demo.
+- Số điện thoại người gửi SOS: chỉ admin và đội đã nhận SOS đó xem được. Ảnh SOS và ảnh điểm ngập không phải tệp công khai, chỉ tải qua API có kiểm tra quyền. Điểm ngập công khai không kèm người báo.

@@ -82,5 +82,21 @@ class WardAdmin(admin.ModelAdmin):
 
 @admin.register(RescueTeam)
 class RescueTeamAdmin(admin.ModelAdmin):
-    list_display = ("name", "phone_number", "vehicles")
-    search_fields = ("name", "phone_number")
+    """CN26: name, base, members, phone, vehicles, communes usually covered."""
+    list_display = ("name", "phone_number", "vehicles", "member_count", "base_name", "status",
+                    "location_updated_at")
+    list_filter = ("status",)
+    search_fields = ("name", "phone_number", "base_name")
+    filter_horizontal = ("service_wards",)
+    fields = ("name", "phone_number", "vehicles", "member_count", "base_name", "base_latitude",
+              "base_longitude", "service_wards", "status", "current_latitude", "current_longitude",
+              "location_updated_at")
+    readonly_fields = ("current_latitude", "current_longitude", "location_updated_at")
+
+    def save_model(self, request, obj, form, change):
+        try:
+            check_in_da_nang(obj.base_latitude, obj.base_longitude)
+        except ValidationError as e:
+            from django.contrib import messages
+            messages.warning(request, f"Căn cứ: {' '.join(e.messages)}")
+        super().save_model(request, obj, form, change)

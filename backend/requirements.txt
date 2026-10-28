@@ -10,3 +10,8 @@ pandas==2.2.3
 scikit-learn==1.6.1
 xgboost==3.4.1
 joblib==1.4.2
+# Road routing (phase 4). geopandas/shapely held to versions that keep numpy 1.26.4 (forecast models).
+osmnx==2.1.1
+networkx==3.7
+geopandas==1.1.4
+shapely==2.1.2

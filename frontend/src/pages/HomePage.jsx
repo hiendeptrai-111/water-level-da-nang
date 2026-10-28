@@ -130,11 +130,12 @@ export default function HomePage() {
 
       <section className="home__sos panel" aria-labelledby="sos-title">
         <h2 id="sos-title" className="home__title">Cần cứu hộ khẩn cấp?</h2>
-        <button type="button" className="sos-button" disabled aria-describedby="sos-note">SOS</button>
+        <Link to="/sos" className="sos-button" aria-describedby="sos-note">SOS</Link>
         <p id="sos-note" className="home__sos-note">
-          Chức năng gửi SOS đang được xây dựng. Nếu gọi được điện thoại, hãy gọi ngay {' '}<a href="tel:112">112</a>.
+          Bấm để mở trang gửi SOS (nhấn giữ 3 giây để gửi). Nếu gọi được điện thoại, hãy gọi ngay.
         </p>
         <EmergencyNumbers />
+        <p className="row home__sos-links"><Link to="/sos/track">Theo dõi SOS đã gửi</Link> · <Link to="/flood-points">Điểm ngập</Link></p>
       </section>
 
       {!user && (

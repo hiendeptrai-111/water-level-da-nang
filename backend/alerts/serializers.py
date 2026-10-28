@@ -57,16 +57,17 @@ class AdminAlertSerializer(PublicAlertSerializer):
 
 
 class NotificationSerializer(serializers.ModelSerializer):
-    alert_level = serializers.CharField(source="alert.level", read_only=True)
-    alert_level_label = serializers.CharField(source="alert.get_level_display", read_only=True)
+    alert_level = serializers.CharField(source="alert.level", read_only=True, default=None)
+    alert_level_label = serializers.CharField(source="alert.get_level_display", read_only=True, default=None)
     reservoirs = serializers.SerializerMethodField()
-    is_simulation = serializers.BooleanField(source="alert.is_simulation", read_only=True)
+    is_simulation = serializers.BooleanField(source="alert.is_simulation", read_only=True, default=False)
+    sos_code = serializers.CharField(source="sos.code", read_only=True, default=None)
 
     class Meta:
         model = Notification
-        fields = ["id", "alert", "alert_level", "alert_level_label", "reservoirs", "content",
-                  "is_reminder", "is_simulation", "created_at", "seen_at"]
+        fields = ["id", "alert", "alert_level", "alert_level_label", "reservoirs", "sos", "sos_code",
+                  "content", "is_reminder", "is_simulation", "created_at", "seen_at"]
         read_only_fields = fields
 
     def get_reservoirs(self, obj):
-        return _reservoirs(obj.alert)
+        return _reservoirs(obj.alert) if obj.alert_id else []

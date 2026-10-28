@@ -97,7 +97,10 @@ class Notification(models.Model):
     recipient = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="người nhận",
                                   on_delete=models.CASCADE, related_name="notifications")
     alert = models.ForeignKey(Alert, verbose_name="cảnh báo", on_delete=models.CASCADE,
-                              related_name="notifications")
+                              related_name="notifications", null=True, blank=True)
+    # Phase 4: a notification can also be about an SOS (task assigned, SOS waiting to be claimed).
+    sos = models.ForeignKey("rescue.SOS", verbose_name="SOS", on_delete=models.CASCADE,
+                            related_name="notifications", null=True, blank=True)
     channel = models.CharField("kênh", max_length=10, choices=Channel.choices)
     content = models.TextField("nội dung")
     is_reminder = models.BooleanField("nhắc lại", default=False)

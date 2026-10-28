@@ -62,7 +62,7 @@ class NotificationViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     def get_queryset(self):
         qs = (Notification.objects.filter(recipient=self.request.user,
                                           channel=Notification.Channel.WEB)
-              .select_related("alert").prefetch_related("alert__reservoirs"))
+              .select_related("alert", "sos").prefetch_related("alert__reservoirs"))
         if self.request.query_params.get("unseen") in ("1", "true"):
             qs = qs.filter(seen_at__isnull=True)
         return qs
@@ -80,8 +80,9 @@ class NotificationViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     def seen(self, request, pk=None):
         note = self.get_object()
         # the e-mail copy of the same alert counts as acknowledged too
-        self._mark(Notification.objects.filter(recipient=request.user, alert=note.alert,
-                                               is_reminder=note.is_reminder))
+        same = (Notification.objects.filter(recipient=request.user, alert=note.alert, is_reminder=note.is_reminder)
+                if note.alert_id else Notification.objects.filter(pk=note.pk))
+        self._mark(same)
         note.refresh_from_db()
         return Response(self.get_serializer(note).data)
 
